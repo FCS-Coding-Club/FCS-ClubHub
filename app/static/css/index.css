@@ -1,9 +1,28 @@
 h1 {
+    position:relative;
     text-align: center;
+    z-index: 0;
 }
 img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
+    position:relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    z-index: -1;
+}
+
+.fcs-logo {
+    animation-duration: 3s;
+    animation-name: rotate-logo;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotate-logo {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
 }
