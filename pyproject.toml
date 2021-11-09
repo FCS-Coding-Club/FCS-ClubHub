@@ -2,7 +2,7 @@
 name = "FCS-ClubHub"
 version = "0.1.0"
 description = "This is a web-app project that the FCS Coding Club will be building throughout the year"
-authors = ["Sean McGoff"]
+authors = ["Friends' Central Coding Club", "Sean McGoff"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
