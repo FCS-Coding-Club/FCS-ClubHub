@@ -1,2 +1,2 @@
 # 2022WebsiteProject
-This is a website project that the FCS Coding Club will be building throughout the year
+This is a web-app project that the FCS Coding Club will be building throughout the year
