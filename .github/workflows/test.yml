@@ -27,6 +27,6 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install Dependencies
-        run: sudo poetry shell && poetry install
+        run: source`poetry env info --path`/bin/activate && poetry install
       - name: Run flask app
         run: python3 run.py
