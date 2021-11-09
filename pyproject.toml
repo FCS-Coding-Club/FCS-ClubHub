@@ -7,6 +7,7 @@ authors = ["Friends' Central Coding Club", "Sean McGoff"]
 [tool.poetry.dependencies]
 python = "^3.8"
 Flask = "^2.0.2"
+pytest = "^6.2.5"
 
 [tool.poetry.dev-dependencies]
 
