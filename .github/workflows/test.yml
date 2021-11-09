@@ -1,13 +1,15 @@
-name: CI
+name: Flask App Test
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
   pull_request:
-    branches: [ master ]
+    branches:
+      - main
 
 jobs:
-  ci:
+  CI:
     strategy:
       fail-fast: false
       matrix:
