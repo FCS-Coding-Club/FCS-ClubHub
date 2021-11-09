@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/register.css') }}>
+    <title>Club Hub - Register</title>
+</head>
+<body>
+    <div class='form-container'>
+        <form id="registration-form" action="/register" method="POST">
+            <label for="fname">First Name:</label>
+            <input type="text" name="fname" placeholder="John">
+            <label for="lname">Last Name:</label>
+            <input type="text" name="lname" placeholder="Smith">
+            <label for="email">E-Mail:</label>
+            <input type="email" name="email" placeholder="name@friendscentral.org">
+            <label for="password">Password:</label>
+            <input type="password" name="password">
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" name="confirm-password">
+            <input type = "submit" value = "submit" />
+        </form>
+    </div>
+</body>
+</html>

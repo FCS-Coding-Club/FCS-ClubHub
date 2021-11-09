@@ -6,4 +6,4 @@ if os.environ.get('DEBUG') is None:
 # TODO: Unit Testing?
 
 # Run App
-app.run(host="0.0.0.0", port=5000, debug=os.environ["DEBUG"])
+app.run(host="0.0.0.0", port=3000, debug=os.environ["DEBUG"])
