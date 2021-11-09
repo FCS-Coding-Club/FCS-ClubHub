@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "FCS-ClubHub"
+version = "0.1.0"
+description = "This is a web-app project that the FCS Coding Club will be building throughout the year"
+authors = ["Friends' Central Coding Club", "Sean McGoff"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^2.0.2"
+pytest = "^6.2.5"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

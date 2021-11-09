@@ -1,15 +1,17 @@
 import os
 from flask import Flask
 
-config = os.environ.get('FLASK_CONFIG')
 
-app = Flask(__name__)
-app.config.from_object('config')
+def create_app():
+    config = os.environ.get('FLASK_CONFIG')
+    app = Flask(__name__)
+    app.config.from_object(config)
+    register_blueprints(app)
+    return app
 
 
-
-# Late Import for dependency stuff
-from .views import general
-from .views import accounts
-app.register_blueprint(general.mod)
-app.register_blueprint(accounts.mod)
+def register_blueprints(app):
+    from .views import general
+    from .views import accounts
+    app.register_blueprint(general.mod)
+    app.register_blueprint(accounts.mod)
