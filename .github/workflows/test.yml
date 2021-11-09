@@ -27,6 +27,6 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install Dependencies
-        run: poetry install
+        run: poetry shell && poetry install
       - name: Run flask app
         run: python3 run.py
