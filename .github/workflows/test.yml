@@ -26,5 +26,7 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
+      - name: Install Dependencies
+      - run: poetry install
       - name: Run flask app
         run: python3 run.py
