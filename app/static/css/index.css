@@ -1,3 +1,4 @@
+/*SWITCH TO BOOTSTRAP LATER*/
 h1 {
     position:relative;
     text-align: center;
@@ -12,7 +13,7 @@ img {
     z-index: -1;
 }
 
-.fcs-logo {
+#big-fcs-logo {
     animation-duration: 3s;
     animation-name: rotate-logo;
     animation-iteration-count: infinite;
