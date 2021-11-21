@@ -10,6 +10,6 @@ def client():
         yield client
 
 
-def test_basic_request(client):
+def test_home_page_request(client):
     res = client.get("/")
     assert res.status_code == 200
