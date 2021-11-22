@@ -10,23 +10,23 @@
         </div>
     {% endif %}
     <div class="h-100 row align-items-center justify-content-center">
-        <form action="/login" class="col-lg-6 bg-light p-3" method="POST">
+        <form action="/login" class="col-lg-6 bg-light py-2 px-3" method="POST">
             {{ form.hidden_tag() }}
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label for="email">Email</label>
                 {% for error in form.email.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
                 {{form.email(size=30, class="form-control")}}
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label for="password">Password</label>
                 {% for error in form.password.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
                 {{form.password(size=30, class="form-control", **{'type': 'password'})}}
             </div>
-            <input type ="submit" class="btn btn-lg btn-primary" value = "Log In" />
+            <input type ="submit" class="btn btn-lg btn-primary my-2" value = "Log In" />
         </form>
     </div>
 {% endblock content %}
