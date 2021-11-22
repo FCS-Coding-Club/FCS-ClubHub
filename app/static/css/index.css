@@ -1,17 +1,4 @@
 /*SWITCH TO BOOTSTRAP LATER*/
-h1 {
-    position:relative;
-    text-align: center;
-    z-index: 0;
-}
-img {
-    position:relative;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
-    z-index: -1;
-}
 
 #big-fcs-logo {
     animation-duration: 3s;
