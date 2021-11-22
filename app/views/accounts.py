@@ -15,10 +15,10 @@ class ValidEmailDomain:
         if field.data.endswith(self.suffix):
             return
         else:
-            raise ValidationError('email must be part of friendscentral.org domain')
+            raise ValidationError(f'email must be part of {self.suffix} domain')
 
 # If the tech dept. ever decides to change the domain, we can just change it here
-fcs_suffix = "@friendscentral.org"
+fcs_suffix = "friendscentral.org"
 
 # Form for registration
 class RegisterForm(FlaskForm):
