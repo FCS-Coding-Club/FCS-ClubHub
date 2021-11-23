@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}SQLITE DEMO PAGE{% endblock %}
+{% block content %}
+<h1>THIS IS A DEMO PAGE FOR DATABASE ACESSING</h1>
+<ul>
+    {% for user in users%}
+    <li>User - {{user.fname}} {{user.lname}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

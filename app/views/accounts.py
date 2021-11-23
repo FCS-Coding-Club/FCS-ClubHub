@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from app.models import models
 
 mod = Blueprint('accounts', __name__, template_folder="../templates")
 
@@ -69,4 +70,9 @@ def login():
             return redirect("/")
         # This person did not successfully entered the form
         return render_template('login.html', form=form)
-        
+
+# SQL DEMO, DELETE LATER       
+@mod.route("/show_users", methods=['GET'])
+def show_user_list():
+    usertable = models.db.session.query(models.User).all()
+    return render_template('demo_users.html', users=usertable)
