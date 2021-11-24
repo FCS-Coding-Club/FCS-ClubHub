@@ -52,8 +52,10 @@ def register():
         # This is where the registration request is handled
         if form.validate_on_submit():
             # This person successfully entered the form
-            return redirect("/", form.fname)
-        # This person did not successfully entered the form
+            models.db.session.add(models.User(form.data['fname'], form.data['lname'], form.data['email']))
+            models.db.session.commit()
+            return redirect("/")
+        # This person did not successfully enter the form
         return render_template('register.html', form=form)
         
 

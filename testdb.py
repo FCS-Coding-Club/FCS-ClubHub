@@ -8,10 +8,9 @@ cur.execute("DROP TABLE IF EXISTS users")
 # Table Creation Code
 cur.execute("""
 CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fname TEXT NOT NULL,
     lname TEXT NOT NULL,
-    email TEXT NOT NULL
+    email TEXT NOT NULL PRIMARY KEY
 );
 """)
 
@@ -22,11 +21,11 @@ CREATE TABLE IF NOT EXISTS users (
     team creates.
 '''
 cur.execute("""
-INSERT INTO users (user_id, fname, lname, email)
+INSERT INTO users (fname, lname, email)
 VALUES 
-    (1, "John", "Smith", "johnsemail@friendscentral.org"),
-    (2, "Jane", "Doe", "janesemail@friendscentral.org"),
-    (3, "Lorem", "Ipsum", "latingibberish@friendscentral.org");
+    ("John", "Smith", "johnsemail@friendscentral.org"),
+    ("Jane", "Doe", "janesemail@friendscentral.org"),
+    ("Lorem", "Ipsum", "latingibberish@friendscentral.org");
 """)
 
 con.commit()
