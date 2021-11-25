@@ -31,4 +31,3 @@ def register_blueprints(app):
     from .views import accounts
     for blueprint in [general.mod, accounts.mod]:
         app.register_blueprint(blueprint)
-        app.register_blueprint(blueprint)
