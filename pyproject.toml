@@ -3,6 +3,9 @@ name = "FCS-ClubHub"
 version = "0.1.0"
 description = "This is a web-app project that the FCS Coding Club will be building throughout the year"
 authors = ["Friends' Central Coding Club", "Sean McGoff"]
+packages = [
+    { include = "./**/*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"

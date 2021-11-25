@@ -29,5 +29,5 @@ def app_config(app):
 def register_blueprints(app):
     from .views import general
     from .views import accounts
-    app.register_blueprint(general.mod)
-    app.register_blueprint(accounts.mod)
+    for blueprint in [general.mod, accounts.mod]:
+        app.register_blueprint(blueprint)
