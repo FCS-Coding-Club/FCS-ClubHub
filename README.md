@@ -5,7 +5,7 @@
 A website for creating and signing up for clubs and, minimizing the amount of overlap between clubs. Created by FCS Coding Club.
 
 # Running
-Setup to work in replit
+Setup to work in replit.
 ## running from terminal
 ```
 pip install .
