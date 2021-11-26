@@ -6,7 +6,7 @@ A website for creating and signing up for clubs and, minimizing the amount of ov
 
 # Running
 Setup to work in replit.
-## running from terminal
+## Running from terminal
 ```
 pip install .
 python3 testdb.py && python3 run.py
