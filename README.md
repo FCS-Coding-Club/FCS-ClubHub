@@ -12,4 +12,4 @@ pip install .
 python3 testdb.py && python3 run.py
 ```
 # replit
-https://rr2---sn-vgqsrned.c.drive.google.com/videoplayback?expire=1638818185&ei=SSmuYcflC4308gT2rY_ICg&ip=50.226.204.182&cp=QVRIWklfV1FWRlhPOnUweDNyNng1RmlNM2ZqTll1eTFTZEl1QW5OV1p0eTVOTFNORGViRHU4M1I&id=785955d9497d1cad&itag=18&source=webdrive&requiressl=yes&ttl=transient&susc=dr&driveid=1oIZmeC5sEaJSxBzvI9ozkXwMH_r-Uj2n&app=explorer&mime=video/mp4&vprv=1&prv=1&dur=462.262&lmt=1637621746496571&sparams=expire,ei,ip,cp,id,itag,source,requiressl,ttl,susc,driveid,app,mime,vprv,prv,dur,lmt&sig=AOq0QJ8wRQIhAJZt5L2xFn_pguqJ6KXfmKRTu2lGc_rcAHcSv8K3wLx9AiBwT9XxAPxDW117QJ6Sb5-rrmPxIcgZy1if4HmJDZnZ3A==&cpn=z890DfMivkm_E1WN&c=WEB_EMBEDDED_PLAYER&cver=1.20211201.01.02&rm=sn-ab5e777l&req_id=41a964c8ba4ca3ee&ipbypass=yes&redirect_counter=2&cm2rm=sn-ab5e7d7l&cms_redirect=yes&mh=d6&mm=34&mn=sn-vgqsrned&ms=ltu&mt=1638804770&mv=m&mvi=2&pl=21&lsparams=ipbypass,mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRgIhAPbgzHzVuqTW7ZljmHywtZGoUYm6jxmlsMHMKYpHe-S_AiEAxv9TovLyahsu6DZR2asXz-diaTeLfV0dVQXfQjcNvk0%3D
+video for how to get started: https://drive.google.com/file/d/1oIZmeC5sEaJSxBzvI9ozkXwMH_r-Uj2n/view
