@@ -8,9 +8,10 @@ cur.execute("DROP TABLE IF EXISTS users")
 # Table Creation Code
 cur.execute("""
 CREATE TABLE IF NOT EXISTS users (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     fname TEXT NOT NULL,
     lname TEXT NOT NULL,
-    email TEXT NOT NULL PRIMARY KEY
+    email TEXT NOT NULL
 );
 """)
 
