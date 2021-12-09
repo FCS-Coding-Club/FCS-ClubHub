@@ -30,7 +30,7 @@ jobs:
         env:
           POETRY_VIRTUALENVS_CREATE: false
       - name: Init DB
-        run: python3 testdb.py
+        run: python3 tests/fill_db.py
       - name: Run Pytest
         run: pytest -v
         env:
