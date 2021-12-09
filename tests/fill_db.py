@@ -1,5 +1,7 @@
 import sqlite3
 
+# This script creates a database with dummy data for testing purposes. Run this before running run.py
+
 con = sqlite3.connect('clubhub.db')
 
 cur = con.cursor()
@@ -14,13 +16,6 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL
 );
 """)
-
-'''
-    Filling the DB with dummy data for now.
-    Eventually, we will have the extracted student data
-    imported into the db through a function that the backend
-    team creates.
-'''
 cur.execute("""
 INSERT INTO users (fname, lname, email)
 VALUES 

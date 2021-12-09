@@ -1,6 +1,7 @@
 import pytest
 from app import create_app
 
+# This script does very basic unit testing for the CI
 
 @pytest.fixture
 def client():

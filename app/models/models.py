@@ -1,8 +1,9 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# Club List
+# Club Model
 class Club(db.Model):
     __tablename__='clubs'
     id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
@@ -17,7 +18,7 @@ class Club(db.Model):
     def __repr__(self):
         return f'<Club {self.name}, id {self.id}>'
 
-# User List
+# User Model
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
@@ -33,7 +34,7 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.fname} {self.lname}>'
 
-# Club Member List
+# Club Member Model
 class Member(db.Model):
     __tablename__='members'
     member_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True, autoincrement=True)
@@ -47,4 +48,23 @@ class Member(db.Model):
         self.isLeader = isLeader
     
     def __repr__(self):
-        return f'<Club {self.isLeader : "Leader" ? "Member"}, id {self.user_id}>'
+        return f'<Club {"Leader" if self.isLeader else "Member"}, id {self.user_id}>'
+
+# Club Announcement Model
+class Announcement(db.Model):
+    __tablename__='announcements'
+    announcement_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True, autoincrement=True)
+    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable = False)
+    title = db.Column(db.Text, nullable = False)
+    desc = db.Column(db.Text, nullable = False)
+    # This will be added on construction of class
+    time = db.Column(db.Text, nullable = False)
+
+    def __init__(self, club_id, title, description):
+        self.club_id = club_id
+        self.title = title
+        self.desc = description
+        self.time = str(datetime.utcnow())
+
+    def __repr__(self):
+        return f'<Announcement: {self.title} - by {self.club_id}>'

@@ -42,7 +42,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix)])
     password = StringField(label='Password', validators=[DataRequired()])
 
-
+# Registration Routing
 @mod.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -59,7 +59,7 @@ def register():
         return render_template('register.html', form=form)
         
 
-
+# Login Routing
 @mod.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -73,7 +73,7 @@ def login():
         # This person did not successfully entered the form
         return render_template('login.html', form=form)
 
-# SQL DEMO, DELETE LATER       
+# SQL TEST, SEE ../templates/demo_users.html for details     
 @mod.route("/show_users", methods=['GET'])
 def show_user_list():
     usertable = models.db.session.query(models.User).all()

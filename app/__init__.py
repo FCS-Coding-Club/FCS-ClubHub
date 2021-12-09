@@ -16,6 +16,7 @@ def create_app():
     models.db.init_app(app)
     return app
 
+# App configuration Function
 def app_config(app):
     config = os.environ.get('FLASK_CONFIG')
     app.config.from_object(config)
@@ -25,7 +26,7 @@ def app_config(app):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../clubhub.db',
     SQLALCHEMY_TRACK_MODIFICATIONS = False))
 
-
+# Blueprint Registration Function
 def register_blueprints(app):
     from .views import general
     from .views import accounts
