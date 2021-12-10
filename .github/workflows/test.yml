@@ -29,8 +29,6 @@ jobs:
           poetry install
         env:
           POETRY_VIRTUALENVS_CREATE: false
-      - name: Init DB
-        run: python3 testdb.py
       - name: Run Pytest
         run: pytest -v
         env:

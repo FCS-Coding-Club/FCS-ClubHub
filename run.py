@@ -3,6 +3,8 @@ import random
 import string
 from app import create_app
 
+# This file will run a Flask's WSGI server for development purposes. We will need to set up our own WSGI for production.
+
 # Debug Checking
 if os.environ.get('DEBUG') is None:
     os.environ["DEBUG"] = "True"
