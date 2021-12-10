@@ -1,7 +1,10 @@
 import os
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
-from .models import models
+from .models import models, test_db
+
+isDebug = os.environ.get("DEBUG")
+isTesting = os.environ.get("TESTING")
 
 def create_app():
     # Init App
@@ -14,6 +17,14 @@ def create_app():
     csrf.init_app(app)
     # DB Init
     models.db.init_app(app)
+    with app.app_context():
+        models.db.drop_all()
+        models.db.create_all()
+        models.db.session.commit()
+        # Adds dummy data for dev purposes
+        if isDebug or isTesting:
+            test_db.fill_with_test_data(models.db, app.app_context())
+            
     return app
 
 # App configuration Function

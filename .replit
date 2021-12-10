@@ -1,2 +1,2 @@
 language = "python3"
-run = "python3 tests/fill_db.py && python3 run.py"
+run = "python3 run.py"

@@ -6,14 +6,13 @@ db = SQLAlchemy()
 # Club Model
 class Club(db.Model):
     __tablename__='clubs'
-    id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=False, unique=True, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
     desc = db.Column(db.Text, nullable=True)
-    members = db.relationship("Member", backref="club",lazy='dynamic', primaryjoin="Club.id == Member.club_id")
-    def __init__(self, cid, name, desc):
-        self.cid = cid
+
+    def __init__(self, name, desc):
         self.name = name
-        self.desc = desc
+        self.desc = desc   
     
     def __repr__(self):
         return f'<Club {self.name}, id {self.id}>'
@@ -21,7 +20,7 @@ class Club(db.Model):
 # User Model
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fname = db.Column(db.Text, nullable=False)
     lname = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
@@ -32,15 +31,15 @@ class User(db.Model):
         self.email = email
 
     def __repr__(self):
-        return f'<User {self.fname} {self.lname}>'
+        return f'<User {self.fname} {self.lname} - id {self.id}>'
 
 # Club Member Model
 class Member(db.Model):
     __tablename__='members'
-    member_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable = False)
-    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable = False, primary_key=True)
+    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable = False, primary_key=True)
     isLeader = db.Column(db.Boolean, nullable = False)
+    user = db.relationship("User")
 
     def __init__(self, user_id, club_id, isLeader):
         self.user_id = user_id
@@ -53,7 +52,7 @@ class Member(db.Model):
 # Club Announcement Model
 class Announcement(db.Model):
     __tablename__='announcements'
-    announcement_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True, autoincrement=True)
+    announcement_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable = False)
     title = db.Column(db.Text, nullable = False)
     desc = db.Column(db.Text, nullable = False)
