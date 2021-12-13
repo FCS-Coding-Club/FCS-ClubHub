@@ -1,12 +1,19 @@
+import bcrypt
 from .models import User, Club, Member, Announcement
 # This script configures the database with dummy data for testing purposes
 
+# Hashing function so that the users table has the passwords in plaintext
+def test_hash(password):
+    return bcrypt.hashpw(password.encode(),bcrypt.gensalt())
+
+
 # Test Data for dev purposes. 
 test_users = [
-    User("John", "Smith", "johnsemail@friendscentral.org"),
-    User("Jane", "Doe", "janesemail@friendscentral.org"),
-    User("Lorem", "Ipsum", "latingibberish@friendscentral.org"),
-    User("Lord", "Farquaad", "kingfromshrek@friendscentral.org"),
+    User("John", "Smith", "johnsemail@friendscentral.org", test_hash("johntest")),
+    User("Jane", "Doe", "janesemail@friendscentral.org", test_hash("janetest")),
+    User("Lorem", "Ipsum", "latingibberish@friendscentral.org", test_hash("loremtest")),
+    User("Lord", "Farquaad", "kingfromshrek@friendscentral.org", test_hash("lordtest")),
+    User("Admin", "User", "admin@friendscentral.org", test_hash("password123"), admin=True)
 ]
 
 test_clubs = [

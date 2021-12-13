@@ -24,11 +24,15 @@ class User(db.Model):
     fname = db.Column(db.Text, nullable=False)
     lname = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+    password = db.Column(db.Text, nullable=False)
 
-    def __init__(self, fname, lname, email):
+    def __init__(self, fname, lname, email, password, admin=False):
         self.fname = fname
         self.lname = lname
         self.email = email
+        self.password = password
+        self.admin = admin
 
     def __repr__(self):
         return f'<User {self.fname} {self.lname} - id {self.id}>'

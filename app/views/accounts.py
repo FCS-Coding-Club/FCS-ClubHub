@@ -1,3 +1,4 @@
+import bcrypt
 from flask import Blueprint, render_template, redirect, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
@@ -16,7 +17,32 @@ class ValidEmailDomain:
         if field.data.endswith(self.suffix):
             return
         else:
-            raise ValidationError(f'email must be part of {self.suffix} domain')
+            raise ValidationError(f'Email must be part of {self.suffix} domain')
+
+# This will probably get deleted later if we go with the account claiming system.
+class UniqueRegistrationEmail:
+    def __call__(self, form, field):
+        exists = models.User.query.filter_by(email=field.data).first()
+
+        if exists:
+            raise ValidationError(f'User with email already exists')
+
+# Email Validation
+class ValidLoginEmail:
+    def __call__(self, form, field):
+        user = models.User.query.filter_by(email=form.data['email']).first()
+        if user is None:
+            raise ValidationError(f'Incorrect Email')
+
+# Password Validation
+class CheckPassword:
+    def __call__(self, form, field):
+        user = models.User.query.filter_by(email=form.data['email']).first()
+        if user is None:
+            return
+        valid = bcrypt.hashpw(field.data.encode(), user.password) == user.password
+        if not valid:
+            raise ValidationError(f'Incorrect password')
 
 # If the tech dept. ever decides to change the domain, we can just change it here
 fcs_suffix = "friendscentral.org"
@@ -25,7 +51,7 @@ fcs_suffix = "friendscentral.org"
 class RegisterForm(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix)])
+    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix), UniqueRegistrationEmail()])
     password = StringField(label='Password', validators=[
         DataRequired(),
         Length(min=8),
@@ -39,8 +65,8 @@ class RegisterForm(FlaskForm):
 
 # Form for logging in
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix)])
-    password = StringField(label='Password', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix), ValidLoginEmail()])
+    password = StringField(label='Password', validators=[DataRequired(), CheckPassword()])
 
 # Registration Routing
 @mod.route("/register", methods=['GET', 'POST'])
@@ -51,8 +77,10 @@ def register():
     if request.method == 'POST':
         # This is where the registration request is handled
         if form.validate_on_submit():
-            # This person successfully entered the form
-            models.db.session.add(models.User(form.data['fname'], form.data['lname'], form.data['email']))
+            # Hash Password with Bcrypt
+            pw_hash = bcrypt.hashpw(form.password.data.encode(),bcrypt.gensalt())
+            # Add user data to user table
+            models.db.session.add(models.User(form.data['fname'], form.data['lname'], form.data['email'], pw_hash))
             models.db.session.commit()
             return redirect("/")
         # This person did not successfully enter the form
