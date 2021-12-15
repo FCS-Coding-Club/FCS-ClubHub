@@ -61,6 +61,9 @@ def sanitize_account_json(json):
     return json
 # Checks for a file accts.json, if not, creates one, and then fills clubhub.db with json data
 def init_account_json():
+    # Create File if it does not exist
+    open('accts.json', 'w').close()
+    # Open and Read File
     with open('accts.json', 'r+') as file:
         r = file.read()
         if r == "":
