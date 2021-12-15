@@ -17,17 +17,34 @@ class Club(db.Model):
     def __repr__(self):
         return f'<Club {self.name}, id {self.id}>'
 
-# User Model
+# Account Model (Whitelisted but Unclaimed)
+class Account(db.Model):
+    __tablename__ = 'accounts'
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False)
+    grade = db.Column(db.Integer, nullable=False)
+    email = db.Column(db.Text, nullable=False, unique=True)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+
+    def __init__(self, name, grade, email, admin=False):
+        self.name = name
+        self.grade = grade
+        self.email = email
+        self.admin = admin
+
+# User Model (Claimed)
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    account_id = db.Column(db.Integer, db.ForeignKey(Account.id), nullable=False)
     fname = db.Column(db.Text, nullable=False)
     lname = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, nullable=False, unique=True)
-    admin = db.Column(db.Boolean, nullable=False, default=False)
+    email = db.Column(db.Text, db.ForeignKey(Account.email), nullable=False)
+    admin = db.Column(db.Boolean, db.ForeignKey(Account.admin), nullable=False)
     password = db.Column(db.Text, nullable=False)
 
-    def __init__(self, fname, lname, email, password, admin=False):
+    def __init__(self, account_id, fname, lname, email, password, admin=False):
+        self.account_id = account_id
         self.fname = fname
         self.lname = lname
         self.email = email

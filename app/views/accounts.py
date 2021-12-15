@@ -19,25 +19,30 @@ class ValidEmailDomain:
         else:
             raise ValidationError(f'Email must be part of {self.suffix} domain')
 
+class ValidRegistrationEmail:
+    def __call__(self, form, field):
+        exists = models.Account.query.filter_by(email=field.data.lower()).first()
+        if not exists:
+            raise ValidationError(f'Email not whitelisted, please contact your administrator')
+
 # This will probably get deleted later if we go with the account claiming system.
 class UniqueRegistrationEmail:
     def __call__(self, form, field):
-        exists = models.User.query.filter_by(email=field.data).first()
-
+        exists = models.User.query.filter_by(email=field.data.lower()).first()
         if exists:
             raise ValidationError(f'User with email already exists')
 
 # Email Validation
 class ValidLoginEmail:
     def __call__(self, form, field):
-        user = models.User.query.filter_by(email=form.data['email']).first()
+        user = models.User.query.filter_by(email=form.data['email'].lower()).first()
         if user is None:
             raise ValidationError(f'Incorrect Email')
 
 # Password Validation
 class CheckPassword:
     def __call__(self, form, field):
-        user = models.User.query.filter_by(email=form.data['email']).first()
+        user = models.User.query.filter_by(email=form.data['email'].lower()).first()
         if user is None:
             return
         valid = bcrypt.hashpw(field.data.encode(), user.password) == user.password
@@ -51,7 +56,7 @@ fcs_suffix = "friendscentral.org"
 class RegisterForm(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix), UniqueRegistrationEmail()])
+    email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix), ValidRegistrationEmail(), UniqueRegistrationEmail()])
     password = StringField(label='Password', validators=[
         DataRequired(),
         Length(min=8),
@@ -80,7 +85,8 @@ def register():
             # Hash Password with Bcrypt
             pw_hash = bcrypt.hashpw(form.password.data.encode(),bcrypt.gensalt())
             # Add user data to user table
-            models.db.session.add(models.User(form.data['fname'], form.data['lname'], form.data['email'], pw_hash))
+            account = models.Account.query.filter_by(email=form.email.data).first()
+            models.db.session.add(models.User(account.id, form.data['fname'], form.data['lname'], form.data['email'], pw_hash))
             models.db.session.commit()
             return redirect("/")
         # This person did not successfully enter the form
