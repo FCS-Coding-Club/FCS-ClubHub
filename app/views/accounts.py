@@ -1,11 +1,16 @@
 import bcrypt
-from flask import Blueprint, render_template, redirect, request
+from flask import abort, Blueprint, render_template, redirect, request, flash
+from flask.helpers import url_for
+from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login.utils import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from app.models import models
 
 mod = Blueprint('accounts', __name__, template_folder="../templates")
+
+login_manager = LoginManager() 
 
 # Email Domain Validation (making sure the email ends in fcs domain)
 class ValidEmailDomain:
@@ -37,7 +42,7 @@ class ValidLoginEmail:
     def __call__(self, form, field):
         user = models.User.query.filter_by(email=form.data['email'].lower()).first()
         if user is None:
-            raise ValidationError(f'Incorrect Email')
+            raise ValidationError(f'Email Not Registered')
 
 # Password Validation
 class CheckPassword:
@@ -92,6 +97,25 @@ def register():
         # This person did not successfully enter the form
         return render_template('register.html', form=form)
         
+# Load User
+@login_manager.user_loader
+def load_user(email_param):
+    return models.User.query.filter(models.User.email==email_param).first()
+
+# Login Unauthorized Handler
+@login_manager.unauthorized_handler
+def handle_needs_login():
+    flash("You have to be logged in to access this page.")
+    return redirect(url_for('accounts.login', next=request.endpoint))
+
+# Redirect Destination
+def redirect_dest(fallback):
+    dest = request.args.get('next')
+    try:
+        dest_url = url_for(dest)
+    except:
+        return redirect(fallback)
+    return redirect(dest_url)
 
 # Login Routing
 @mod.route("/login", methods=['GET', 'POST'])
@@ -102,10 +126,20 @@ def login():
     if request.method == 'POST':
         # This is where the login request is handled
         if form.validate_on_submit():
-            # This is where the JWT auth will be
-            return redirect("/")
-        # This person did not successfully entered the form
+            user = load_user(form.email.data)
+            login_user(user)
+            flash('Logged in successfully.')
+            # This works, but does not redirect, only renders the index page
+            return render_template('index.html', current_user=current_user)
+        # This person did not successfully enter the form
         return render_template('login.html', form=form)
+
+@mod.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
 
 # SQL TEST, SEE ../templates/demo_users.html for details     
 @mod.route("/show_users", methods=['GET'])
