@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user
 from flask_login.utils import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField
+from wtforms.fields.simple import BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from app.models import models
 
@@ -77,6 +78,7 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), ValidEmailDomain(suffix=fcs_suffix), ValidLoginEmail()])
     password = StringField(label='Password', validators=[DataRequired(), CheckPassword()])
+    remember_me = BooleanField(label = 'Remember Me')
 
 # Registration Routing
 @mod.route("/register", methods=['GET', 'POST'])
@@ -128,7 +130,7 @@ def login():
         # This is where the login request is handled
         if form.validate_on_submit():
             user = models.User.query.filter_by(email=form.email.data).first()
-            login_user(user)
+            login_user(user, remember=form.remember_me)
             flash('Logged in successfully.')
             # This works, but does not redirect, only renders the index page
             return redirect(url_for('general.homepage'))
