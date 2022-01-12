@@ -99,8 +99,9 @@ def register():
         
 # Load User
 @login_manager.user_loader
-def load_user(email_param):
-    return models.User.query.filter(models.User.email==email_param).first()
+def load_user(userid):
+    print(userid)
+    return models.User.query.get(userid)
 
 # Login Unauthorized Handler
 @login_manager.unauthorized_handler
@@ -126,11 +127,11 @@ def login():
     if request.method == 'POST':
         # This is where the login request is handled
         if form.validate_on_submit():
-            user = load_user(form.email.data)
+            user = models.User.query.filter_by(email=form.email.data).first()
             login_user(user)
             flash('Logged in successfully.')
             # This works, but does not redirect, only renders the index page
-            return render_template('index.html', current_user=current_user)
+            return redirect(url_for('general.homepage'))
         # This person did not successfully enter the form
         return render_template('login.html', form=form)
 
