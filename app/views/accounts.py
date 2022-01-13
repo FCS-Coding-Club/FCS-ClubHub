@@ -1,7 +1,7 @@
 import bcrypt
-from flask import abort, Blueprint, render_template, redirect, request, flash
+from flask import Blueprint, render_template, redirect, request, flash
 from flask.helpers import url_for
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import current_user, LoginManager, login_user, logout_user
 from flask_login.utils import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField
@@ -102,7 +102,6 @@ def register():
 # Load User
 @login_manager.user_loader
 def load_user(userid):
-    print(userid)
     return models.User.query.get(userid)
 
 # Login Unauthorized Handler
@@ -133,7 +132,7 @@ def login():
             login_user(user, remember=form.remember_me)
             flash('Logged in successfully.')
             # This works, but does not redirect, only renders the index page
-            return redirect(url_for('general.homepage'))
+            return redirect(url_for('community.profile', userid=current_user.id))
         # This person did not successfully enter the form
         return render_template('login.html', form=form)
 

@@ -43,10 +43,11 @@ def app_config(app):
     SQLALCHEMY_TRACK_MODIFICATIONS = False))
 
 # Blueprint Registration Function
-def register_blueprints(app):
-    from .views import general
+def register_blueprints(app):    
     from .views import accounts
-    for blueprint in [general.mod, accounts.mod]:
+    from .views import community
+    from .views import general
+    for blueprint in [accounts.mod, community.mod, general.mod]:
         app.register_blueprint(blueprint)
 
 admin_json = {
