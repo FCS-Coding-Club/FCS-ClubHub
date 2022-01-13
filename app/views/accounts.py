@@ -141,7 +141,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    return redirect(url_for('general.homepage'))
 
 
 # SQL TEST, SEE ../templates/demo_users.html for details     
