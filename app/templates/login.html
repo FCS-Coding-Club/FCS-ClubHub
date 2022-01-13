@@ -27,6 +27,10 @@
                 {% endfor %}
                 {{form.password(size=30, class="form-control", **{'type': 'password'})}}
             </div>
+            <div class="form-group my-2"> 
+                {{form.remember_me()}}
+                <label for="remember_me">Remember Me</label>
+            </div>
             <input type ="submit" class="btn btn-lg btn-primary my-2" value = "Log In" />
         </form>
     </div>
