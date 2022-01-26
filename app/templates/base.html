@@ -15,13 +15,13 @@
 </head>
 {% macro profile(user) %}
 <!--Profile Macro-->
-<div class="me-2 rounded-circle userimg">
+<div class="me-2 rounded-circle userimg shadow-sm">
     {{user.fname[0] + user.lname[0]}}
 </div>
 {% endmacro %}
 <body class="w-100 h-100" style="overflow: scroll;">
     <div class="d-flex flex-column min-vh-100 vh-100">
-        <nav class="navbar w-100 py-3 flex-shrink-0 bg-light">
+        <nav class="navbar w-100 py-3 flex-shrink-0 bg-light shadow-sm">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">FCS Club Hub</a>
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </nav>
-        <main role="main" class="flex-grow-1">{% block content %}{% endblock %}</main>
+        <main role="main" class="flex-grow-1 shadow-sm">{% block content %}{% endblock %}</main>
         <footer class="w-100 py-2 flex-shrink-0">
             <div class="footer-copyright text-center py-3 text-dark">© 2021 Copyright:
                 <a href="https://github.com/FCS-Coding-Club/"> Friends' Central Coding Club</a>

@@ -11,7 +11,7 @@
         </div>
     {% endif %}
     <div class="h-100 row align-items-center justify-content-center">
-        <form action="/login" class="col-lg-6 bg-light py-2 px-3" method="POST">
+        <form action="/login" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group my-2">
                 <label for="email">Email</label>
@@ -31,7 +31,7 @@
                 {{form.remember_me()}}
                 <label for="remember_me">Remember Me</label>
             </div>
-            <input type ="submit" class="btn btn-lg btn-primary my-2" value = "Log In" />
+            <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Log In" />
         </form>
     </div>
 {% endblock content %}
