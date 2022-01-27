@@ -1,2 +1,2 @@
 language = "python3"
-run = "./init.sh && python3 run.py"
+run = "python3 setup.py && python3 run.py"
