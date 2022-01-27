@@ -1,8 +1,12 @@
+from fileinput import filename
 import json
 import os
+from pydoc import importfile
+from click import style
 from flask import Flask
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
+import sass
 from .models import models, test_db, utils
 from .views import accounts
 
@@ -10,6 +14,8 @@ isDebug = os.environ.get("DEBUG")
 isTesting = os.environ.get("TESTING")
 
 def create_app():
+    # Compile Sass
+    compile_sass()
     # Init App
     app = Flask(__name__)
     # Configuration
@@ -41,6 +47,13 @@ def app_config(app):
     WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../clubhub.db',
     SQLALCHEMY_TRACK_MODIFICATIONS = False))
+
+# Sass Compiling Function
+def compile_sass():
+    print("Compiling Sass...")
+    compiled = sass.compile(filename=('app/static/sass/main.scss'), include_paths=("bootstrap"))
+    with open('app/static/css/bootstrap_min.css', 'w') as css:
+        css.write(compiled)
 
 # Blueprint Registration Function
 def register_blueprints(app):    

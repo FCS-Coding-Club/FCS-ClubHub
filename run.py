@@ -1,21 +1,10 @@
 import os
 import random
 import string
-import subprocess
+import sass
 from app import create_app
 
 # This file will run a Flask's WSGI server for development purposes. We will need to set up our own WSGI for production.
-
-# Compile Sass
-print("Compiling Bootstrap...")
-sass_cmd = ["node_modules/.bin/sass", "app/sass/main.scss", "app/static/css/bootstrap_min.css","--style", "compressed"]
-sass_return = subprocess.run(sass_cmd)
-if sass_return.stderr:
-    raise subprocess.CalledProcessError(
-                returncode = sass_return.returncode,
-                cmd = sass_return.args,
-                stderr = sass_return.stderr
-            )
 
 # Debug Checking
 if os.environ.get('DEBUG') is None:
