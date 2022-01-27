@@ -1,0 +1,25 @@
+{
+  "name": "fcs-clubhub",
+  "version": "1.0.0",
+  "description": "A Club Social Media",
+  "main": "run.py",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "poetry shell && python3 run.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeanMcGoff/FCS-ClubHub.git"
+  },
+  "author": "FCS Coding Club",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SeanMcGoff/FCS-ClubHub/issues"
+  },
+  "homepage": "https://github.com/SeanMcGoff/FCS-ClubHub#readme",
+  "devDependencies": {
+    "sass": "^1.49.0"
+  }
+}
