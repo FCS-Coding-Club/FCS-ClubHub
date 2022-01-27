@@ -9,5 +9,5 @@ Setup to work in replit.
 ## Running from terminal
 ```
 pip install .
-python3 testdb.py && python3 run.py
+./init.sh && python3 run.py
 ```
