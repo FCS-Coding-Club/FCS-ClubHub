@@ -6,6 +6,6 @@ if "REPL_ID" not in environ:
     subprocess.run(["pip", "install", "-U", "pip"])
     subprocess.run(["pip", "install", "poetry"])
     subprocess.run(["poetry", "shell"])
-    subprocess.run(["poetry", "check"])
+    subprocess.run(["poetry", "install"])
 subprocess.run(["git", "submodule", "update", "--init", "--recursive"])  
 print("Setup Complete")
