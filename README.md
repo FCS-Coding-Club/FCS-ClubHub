@@ -5,9 +5,11 @@
 A website for creating and signing up for clubs and, minimizing the amount of overlap between clubs. Created by FCS Coding Club.
 
 # Running
-Setup to work in replit.
-## Running from terminal
+The repository is set up to work right in replit.com. Just press the run button, and wait until all the dependencies install. 
+Note: Since replit's web preview is loaded in an iframe, it will block you from registering and logging in. To get around this,
+open the preview in a new tab.
+## Running from terminal (locally)
 ```
-pip install .
-./init.sh && python3 run.py
+python3 setup.py
+python3 run.py
 ```
