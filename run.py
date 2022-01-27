@@ -8,7 +8,7 @@ from app import create_app
 
 # Compile Sass
 print("Compiling Bootstrap...")
-sass_cmd = ["sass", "app/sass/main.scss", "app/static/css/bootstrap_min.css","--style", "compressed"]
+sass_cmd = ["node_modules/.bin/sass", "app/sass/main.scss", "app/static/css/bootstrap_min.css","--style", "compressed"]
 sass_return = subprocess.run(sass_cmd)
 if sass_return.stderr:
     raise subprocess.CalledProcessError(

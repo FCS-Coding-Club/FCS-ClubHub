@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "poetry shell && python3 run.py"
+    "run": "./init.sh && python3 run.py"
   },
   "repository": {
     "type": "git",
