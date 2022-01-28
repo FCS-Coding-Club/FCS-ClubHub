@@ -1,5 +1,15 @@
-//Custom
+//Custom Colors
 $primary: #41608b;
+$secondary: #233043;
 
 // Import
 @import 'bootstrap/scss/bootstrap.scss';
+
+// Profile Picture
+.userimg {
+    background-color: $gray-400;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    padding-top: 0.25rem;
+}

@@ -141,10 +141,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('general.homepage'))
-
-
-# SQL TEST, SEE ../templates/demo_users.html for details     
-@mod.route("/show_users", methods=['GET'])
-def show_user_list():
-    usertable = models.db.session.query(models.User).all()
-    return render_template('demo_users.html', users=usertable)
