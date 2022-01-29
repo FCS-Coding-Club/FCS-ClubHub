@@ -17,7 +17,7 @@
     {{user.fname[0] + user.lname[0]}}
 </div>
 {% endmacro %}
-<body class="w-100 h-100" style="overflow: scroll;">
+<body class="w-100 h-100" style="overflow: hidden;">
     <div class="d-flex flex-column min-vh-100 vh-100">
         <nav class="navbar w-100 py-3 flex-shrink-0 bg-light shadow-sm">
             <div class="container-fluid">
@@ -41,8 +41,8 @@
                 </div>
             </div>
         </nav>
-        <main role="main" class="flex-grow-1 shadow-sm">{% block content %}{% endblock %}</main>
-        <footer class="w-100 py-2 flex-shrink-0">
+        <main role="main" class="flex-grow-1 bg-light bg-gradient">{% block content %}{% endblock %}</main>
+        <footer class="w-100 py-2 flex-shrink-0 bg-light shadow-lg">
             <div class="footer-copyright text-center py-3 text-dark">© 2021 Copyright:
                 <a href="https://github.com/FCS-Coding-Club/"> Friends' Central Coding Club</a>
             </div>
