@@ -7775,3 +7775,7 @@ textarea.form-control-lg {
   height: 2rem;
   text-align: center;
   padding-top: 0.25rem; }
+
+svg {
+  max-width: 100%;
+  max-height: 100%; }
