@@ -3,7 +3,7 @@ import json
 import os
 from pydoc import importfile
 from click import style
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 import sass

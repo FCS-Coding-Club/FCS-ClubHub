@@ -12,33 +12,45 @@
     {% endblock %}
 </head>
 {% macro profile(user) %}
-<!--Profile Macro-->
-<div class="me-2 rounded-circle userimg shadow-sm">
-    {{user.fname[0] + user.lname[0]}}
+<div class="dropdown text-end">
+    <a href="/profile/{{user.id}}" class="text-black text-decoration-none">
+        <div class="userimg me-2 rounded-circle fs-6 text-black shadow-sm">{{user.fname[0] + user.lname[0]}}</span>
+    </a>
 </div>
+{% endmacro %}
+{% macro big_profile(user)%}
+<div class="profilephoto rounded-circle text-black">{{user.fname[0] + user.lname[0]}}</div>
 {% endmacro %}
 <body class="w-100 h-100" style="overflow: hidden;">
     <div class="d-flex flex-column min-vh-100 vh-100">
-        <nav class="navbar w-100 py-3 flex-shrink-0 bg-light shadow-sm">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">FCS Club Hub</a>
-                </div>
-                <div class="d-flex">
+                <a class="navbar-brand" href="/">FCS Club Hub</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarExample" aria-controls="navbarExample" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarExample">
+                    <ul class="nav navbar-nav float-end">
                     {% if current_user.is_authenticated %}
-                    <div class="nav-item me-2">
-                        <form action="/logout"><input type="submit" class="btn btn-light btn-sm" value="Log Out" /></form>
-                    </div>
-                    {{profile(current_user)}}
+                    <li class="nav-item m-2 float-end">
+                        <form action="/logout">
+                            <input class="btn btn-light float-end" type="submit" value="Logout">
+                        </form>
+                    </li>
                     {% else %}
-                    <div class="nav-item me-2">
-                        <form action="/register"><input type="submit" class="btn btn-light btn-sm" value="Register" /></form>
-                    </div>
-                    <div class="nav-item">
-                        <form action="/login"><input type="submit" class="btn btn-light btn-sm" value="Log In" /></form>
-                    </div>
+                        <li class="nav-item m-2 float-end">
+                            <form action="/login">
+                                <input class="btn btn-light float-end" type="submit" value="Login">
+                            </form>    
+                        </li>
+                        <li class="nav-item m-2 float-end">
+                            <form action="/register">
+                                <input class="btn btn-light float-end" type="submit" value="Register">
+                            </form>
+                        </li>
                     {% endif %}
-                </div>
+                    </ul>
+                <div>
             </div>
         </nav>
         <main role="main" class="flex-grow-1 bg-light bg-gradient">{% block content %}{% endblock %}</main>

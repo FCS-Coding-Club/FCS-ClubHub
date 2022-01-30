@@ -1,5 +1,6 @@
 import bcrypt
-from .models import User, Club, Member, Announcement
+from .models import User, Club, Member, Announcement, Account, db
+from app.views import accounts
 # This script configures the database with dummy data for testing purposes
 
 # Test Data for dev purposes. 
@@ -26,9 +27,19 @@ def fill_with_test_data(db, ctx):
         for club in test_clubs:
             db.session.add(club)
             db.session.commit()
-
+        
         test_announcements = define_relational_test_data()
         
+        register_admin_user()
+
         for announcement in test_announcements:
             db.session.add(announcement)
             db.session.commit()
+
+def register_admin_user():
+    pw_hash = b'$2b$12$HDFalMQSEb3vbifqn5pvUOKv4Q/S2JriwQ78STfaBLZUZSVdCFmmG'
+    # Add user data to user table
+    admin_email = "admin@"+accounts.fcs_suffix
+    account = Account.query.filter_by(email=admin_email).first()
+    db.session.add(User(account.id, "Admin", "User", admin_email, pw_hash))
+    db.session.commit()

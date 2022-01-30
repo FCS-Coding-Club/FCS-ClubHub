@@ -132,7 +132,7 @@ def login():
             login_user(user, remember=form.remember_me)
             flash('Logged in successfully.')
             # This works, but does not redirect, only renders the index page
-            return redirect(url_for('community.profile', userid=current_user.id))
+            return redirect(request.args.get("next") or url_for('community.profile', userid=current_user.id))
         # This person did not successfully enter the form
         return render_template('login.html', form=form)
 
