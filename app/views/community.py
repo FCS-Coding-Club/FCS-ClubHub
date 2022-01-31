@@ -15,7 +15,7 @@ class UniqueClubName:
     def __call__(self, form, field):
         exists = models.Club.query.filter_by(name=field.data).first()
         if exists:
-            raise ValidationError(f'User with email already exists')
+            raise ValidationError(f'Club with name {field.data} already exists')
 
 class RegisterClubForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30), UniqueClubName()])
