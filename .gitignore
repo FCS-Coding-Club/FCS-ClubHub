@@ -126,4 +126,7 @@ dmypy.json
 *.db 
 *.csv 
 *.xslx
-*.json
+accts.json
+
+# NPM
+node_modules/

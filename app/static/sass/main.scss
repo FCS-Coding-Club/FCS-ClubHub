@@ -1,0 +1,47 @@
+//Custom Colors
+$primary: #2660b0;
+$secondary: #233043;
+$light: #b9c0dc;
+$dark: #3f3f3f;
+$blob-light: #7e8ef2;
+$blob-dark: #4f54fb;
+
+// Import
+@import 'bootstrap/scss/bootstrap.scss';
+
+// svg auto-resize
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+// Profile Picture
+.userimg {
+    background-color: $gray-200;
+    width: 2rem;
+    height: 2rem;
+    padding-top: 0.15rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.profilephoto {
+    width: 10rem;
+    height: 10rem;
+    background-color: $gray-200;
+    text-align: center;
+    font-size: 5rem;
+    padding-top: 1.1rem;
+    margin: auto;
+    margin-top: 5rem;
+}
+
+.absolute_center {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

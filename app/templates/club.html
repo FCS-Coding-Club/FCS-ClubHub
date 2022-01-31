@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock head %}
+{% block title %}ClubHub - {{current_club.name}} {% endblock title %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+            <h2>{{current_club.name}}</h2>
+            <p>{{current_club.desc}}</p>
+            <h3>Leaders</h3>
+            <div class=".row-cols-3">
+            {% for member in members%}
+                {% if member.isLeader%}
+                <div class="col">{{profile(load_user(member.user_id))}}</div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            {% for member in members%}
+                {% if not member.isLeader%}
+                <div class="col">{{profile(load_user(member.user_id))}}</div>
+                {% endif %}
+            {% endfor %}
+            <h3>Members</h3>
+        </div>
+        <div class="col-3"> 
+        </div>
+        <div class="col-3">
+        </div>
+    </div>
+</div>
+{% endblock content %}

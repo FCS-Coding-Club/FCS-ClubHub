@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}ClubHub - {{profile_user.fname}} {{profile_user.lname}}{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/profile.css') }}>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            {{big_profile(profile_user)}}
+            <div style="text-align: center;">
+                {{profile_user.fname + " " + profile_user.lname}}
+            </div>
+        </div>
+        <div class="col">
+            <div class="row bg-lightgrey" style="background-color: lightgrey;">
+                <h1>
+                    Clubs:
+                </h1>
+            </div>
+            <div class="row" style="background-color: lightslategrey;">
+                C
+            </div>
+        </div>
+        <div class="col">
+            <div class="row bg-lightgrey" style="background-color: lightgrey;">
+                B
+            </div>
+            <div class="row bg-lightslategrey" style="background-color: lightslategrey;">
+                D
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<!--The registration page of Clubhub, child of base.html-->
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock head %}
+{% block title %}Club Hub - Register{% endblock title %}
+{% block content %}
+    {% if form.errors %}
+    <div class="alert alert-danger">
+    Invalid Form, Please Try Again
+    </div>
+    {% endif %}
+    <div class="h-100 row align-items-center justify-content-center">
+        <form action="/register_club" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+            {{ form.hidden_tag() }}
+                <div class="form-group my-2">
+                    <label for="name">Club Name</label>
+                    {% for error in form.name.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.name(size=30, class="form-control bg-light border-dark", placeholder="Knot Reel Club")}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="desc">Description (optional)</label>
+                    {% for error in form.desc.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.desc(size=280, class="form-control bg-light border-dark", style="height: 100px", placeholder="The Reelest Club on Campus")}}
+                </div>
+            <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Create Club" />
+        </form>       
+    </div>
+{% endblock content %}

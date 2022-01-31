@@ -10,10 +10,12 @@ class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False, unique=True)
     desc = db.Column(db.Text, nullable=True)
+    verified = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, name, desc):
         self.name = name
-        self.desc = desc   
+        self.desc = desc
+        self.verified = False
     
     def __repr__(self):
         return f'<Club {self.name}, id {self.id}>'
