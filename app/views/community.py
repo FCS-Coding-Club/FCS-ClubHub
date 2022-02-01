@@ -57,7 +57,7 @@ def club(clubid):
     current_club = load_club(clubid)
     if current_club is not None:
         members = load_club_members(clubid)
-        return render_template('club.html', current_club=current_club, current_user=current_user, members=members, load_user=load_user)
+        return render_template('club.html', current_club=current_club, current_user=current_user, members=members)
     abort(404)
 
 def load_club(club_id):
