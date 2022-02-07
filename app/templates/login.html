@@ -2,8 +2,26 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
+    <script src="https://kit.fontawesome.com/ba4069388d.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function password_show_hide() {
+            var x = document.getElementById("password-form");
+            var show_text = document.getElementById("show");
+            var hide_text = document.getElementById("hide");
+            hide_text.classList.remove("d-none");
+            if (x.type === "password") {
+                x.type = "text";
+                show_text.style.display = "none";
+                hide_text.style.display = "block";
+            } else {
+                x.type = "password";
+                show_text.style.display = "block";
+                hide_text.style.display = "none";
+            }
+        }
+    </script>
 {% endblock head %}
-{% block title %}ClubHub - Register{% endblock title %}
+{% block title %}ClubHub - Login{% endblock title %}
 {% block content %}
     {% if form.errors %}
         <div class="alert alert-danger">
@@ -20,12 +38,18 @@
                 {% endfor %}
                 {{form.email(size=30, class="form-control bg-light border-dark")}}
             </div>
-            <div class="form-group my-2">
-                <label for="password">Password</label>
+            <div class="form-group my-2 row mx-0">
+                <label for="password" class="p-0">Password</label>
                 {% for error in form.password.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                {{form.password(size=30, class="form-control bg-light border-dark", **{'type': 'password'})}}
+                <div class="col-11 p-0">
+                    {{form.password(size=30, id="password-form", class="form-control bg-light border-dark", **{'type': 'password'})}}
+                </div>
+                <div class="col-1 border border-dark rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
+                    <p class="my-auto mx-auto" id="show">Show</p>
+                    <p class="d-none my-auto mx-auto" id="hide">Hide</p>
+                </div>
             </div>
             <div class="form-group my-2"> 
                 {{form.remember_me(class="bg-light")}}
