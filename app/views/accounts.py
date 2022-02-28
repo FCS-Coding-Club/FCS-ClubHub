@@ -97,12 +97,7 @@ def register():
             models.db.session.commit()
             return redirect("/")
         # This person did not successfully enter the form
-        return render_template('register.html', form=form)
-        
-# Load User
-@login_manager.user_loader
-def load_user(userid):
-    return models.User.query.get(userid)
+        return render_template('register.html', form=form)    
 
 # Login Unauthorized Handler
 @login_manager.unauthorized_handler

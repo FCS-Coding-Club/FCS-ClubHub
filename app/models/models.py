@@ -71,7 +71,7 @@ class Member(db.Model):
         self.isLeader = isLeader
     
     def __repr__(self):
-        return f'<Club {"Leader" if self.isLeader else "Member"}, id {self.user_id}>'
+        return f'<Club {"Leader" if self.isLeader else "Member"}, id {self.user_id}, club_id {self.club_id}>'
 
 # Club Announcement Model
 class Announcement(db.Model):

@@ -6,8 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
 
-from app.views.accounts import load_user
-from app.models import models
+from app.models import models, utils
 
 mod = Blueprint('community', __name__, template_folder='../templates')
 
@@ -25,9 +24,13 @@ class RegisterClubForm(FlaskForm):
 @mod.route("/profile/<userid>", methods=["GET"])
 @login_required
 def profile(userid):
-    profile_user = load_user(userid)
+    profile_user = utils.load_user(userid)
+    user_clubs = utils.load_user_clubs(userid)
     if profile_user is not None:
-        return render_template('profile.html', profile_user=profile_user, current_user=current_user)
+        return render_template('profile.html', 
+        profile_user=profile_user, 
+        current_user=current_user, 
+        user_clubs=user_clubs)
     abort(404)
 
 # Register Club Form
@@ -54,14 +57,11 @@ def register_club():
 @mod.route("/club/<clubid>", methods=["GET"])
 @login_required
 def club(clubid):
-    current_club = load_club(clubid)
+    current_club = utils.load_club(clubid)
     if current_club is not None:
-        members = load_club_members(clubid)
-        return render_template('club.html', current_club=current_club, current_user=current_user, members=members)
+        members = utils.load_club_members(clubid)
+        return render_template('club.html', 
+        current_club=current_club, 
+        current_user=current_user, 
+        members=members)
     abort(404)
-
-def load_club(club_id):
-    return models.Club.query.get(club_id)
-
-def load_club_members(clubid):
-    return models.Member.query.filter_by(club_id=clubid)

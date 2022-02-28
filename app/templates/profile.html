@@ -14,21 +14,27 @@
             </div>
         </div>
         <div class="col">
-            <div class="row bg-lightgrey" style="background-color: lightgrey;">
-                <h1>
-                    Clubs:
-                </h1>
-            </div>
-            <div class="row" style="background-color: lightslategrey;">
-                C
+            <div class="row">
+                <h3>
+                    is a member of...
+                </h3>
+                {% for user_club in user_clubs %}
+                {% if not user_club['isLeader'] %}
+                <a href="/club/{{user_club['club'].club_id}}">{{user_club['club'].name}}</a>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
         <div class="col">
-            <div class="row bg-lightgrey" style="background-color: lightgrey;">
-                B
-            </div>
-            <div class="row bg-lightslategrey" style="background-color: lightslategrey;">
-                D
+            <div class="row">
+                <h3>
+                    is a leader of...
+                </h3>
+                {% for user_club in user_clubs %}
+                {% if user_club['isLeader'] %}
+                <a href="/club/{{user_club['club'].id}}">{{user_club['club'].name}}</a>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
