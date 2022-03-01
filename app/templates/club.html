@@ -13,13 +13,13 @@
             <div class=".row-cols-3">
             {% for member in members%}
                 {% if member.isLeader%}
-                <div class="col">{{profile(load_user(member.user_id))}}</div>
+                <div class="col">{{profile(member.user)}}</div>
                 {% endif %}
             {% endfor %}
             </div>
             {% for member in members%}
                 {% if not member.isLeader%}
-                <div class="col">{{profile(load_user(member.user_id))}}</div>
+                <div class="col">{{profile(member.user)}}</div>
                 {% endif %}
             {% endfor %}
             <h3>Members</h3>

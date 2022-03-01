@@ -97,12 +97,7 @@ def register():
             models.db.session.commit()
             return redirect("/")
         # This person did not successfully enter the form
-        return render_template('register.html', form=form)
-        
-# Load User
-@login_manager.user_loader
-def load_user(userid):
-    return models.User.query.get(userid)
+        return render_template('register.html', form=form)    
 
 # Login Unauthorized Handler
 @login_manager.unauthorized_handler
@@ -131,13 +126,11 @@ def login():
             user = models.User.query.filter_by(email=form.email.data).first()
             login_user(user, remember=form.remember_me)
             flash('Logged in successfully.')
-            # This works, but does not redirect, only renders the index page
-            return redirect(request.args.get("next") or url_for('community.profile', userid=current_user.id))
+            return redirect(url_for('community.profile', userid=current_user.id))
         # This person did not successfully enter the form
         return render_template('login.html', form=form)
 
 @mod.route("/logout")
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('general.homepage'))
