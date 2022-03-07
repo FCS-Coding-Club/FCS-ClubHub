@@ -91,3 +91,20 @@ class Announcement(db.Model):
 
     def __repr__(self):
         return f'<Announcement: {self.title} - by {self.club_id}>'
+
+class Meeting(db.Model):
+    __tablename__='meetings'
+    meeting_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable = False)
+    # In MMDDYYYY Format
+    meeting_day = db.Column(db.Text, nullable = False)
+    # Repeats are in days (7 = weekly, 14 = bi-weekly, etc)
+    repeats = db.Column(db.Integer, nullable = False)
+
+    def __init__(self, club_id, meeting_day, repeats):
+        self.club_id = club_id
+        self.meeting_day = meeting_day
+        self.repeats = repeats
+    
+    def __repr__(self):
+        return f'<Meeting: on {self.meeting_day} - by {self.club_id}>'

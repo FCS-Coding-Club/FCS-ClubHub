@@ -5,7 +5,8 @@ from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
-
+from datetime import datetime
+import calendar
 from app.models import models, utils
 
 mod = Blueprint('community', __name__, template_folder='../templates')
@@ -19,6 +20,19 @@ class UniqueClubName:
 class RegisterClubForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30), UniqueClubName()])
     desc = TextAreaField('Description', validators=[DataRequired(),Length(max=280)])
+
+def get_calendar_data(month, year):
+    mr = calendar.monthrange(year, month)
+    cal_dictionary = {}
+    for row in range(0, 6):
+        for col in range(0, 7):
+            cal_dictionary[(row, col)] = ""
+    current_row = 0
+    for day in range(mr[0],mr[1]+1):
+        weekday = calendar.weekday(int(year), int(month), day)
+        cal_dictionary[(current_row,weekday)] = day
+        if weekday == 6: current_row += 1
+    return cal_dictionary
 
 # Profile Routing
 @mod.route("/profile/<userid>", methods=["GET"])
@@ -60,8 +74,12 @@ def club(clubid):
     current_club = utils.load_club(clubid)
     if current_club is not None:
         members = utils.load_club_members(clubid)
+        td = datetime.today()
+        calendar = get_calendar_data(td.month, td.year)
         return render_template('club.html', 
         current_club=current_club, 
         current_user=current_user, 
-        members=members)
+        members=members,
+        calendar=calendar,
+        cal_title=td.strftime('%B %Y'))
     abort(404)
