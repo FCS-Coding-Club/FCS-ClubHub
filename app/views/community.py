@@ -7,7 +7,7 @@ from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
 from datetime import datetime
 import calendar
-from app.models import models, utils
+from app.models import dbutils, models
 
 mod = Blueprint('community', __name__, template_folder='../templates')
 
@@ -38,8 +38,8 @@ def get_calendar_data(month, year):
 @mod.route("/profile/<userid>", methods=["GET"])
 @login_required
 def profile(userid):
-    profile_user = utils.load_user(userid)
-    user_clubs = utils.load_user_clubs(userid)
+    profile_user = dbutils.load_user(userid)
+    user_clubs = dbutils.load_user_clubs(userid)
     if profile_user is not None:
         return render_template('profile.html', 
         profile_user=profile_user, 
@@ -71,15 +71,14 @@ def register_club():
 @mod.route("/club/<clubid>", methods=["GET"])
 @login_required
 def club(clubid):
-    current_club = utils.load_club(clubid)
+    current_club = dbutils.load_club(clubid)
     if current_club is not None:
-        members = utils.load_club_members(clubid)
+        members = dbutils.load_club_members(clubid)
         td = datetime.today()
         calendar = get_calendar_data(td.month, td.year)
         return render_template('club.html', 
         current_club=current_club, 
         current_user=current_user, 
         members=members,
-        calendar=calendar,
-        cal_title=td.strftime('%B %Y'))
+        calendar=calendar)
     abort(404)

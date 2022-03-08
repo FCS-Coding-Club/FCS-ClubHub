@@ -7,8 +7,9 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 import sass
-from .models import models, test_db, utils
-from .views import accounts
+from .models import dbutils, models, test_db
+from .views import accounts, community
+from .utils import render_functions
 
 isDebug = os.environ.get("DEBUG")
 isTesting = os.environ.get("TESTING")
@@ -28,6 +29,9 @@ def create_app():
     accounts.login_manager.init_app(app)
     # DB Init
     models.db.init_app(app)
+    # Add Render Functions to Jinja Globals
+    app.jinja_env.globals.update(render_functions)
+    # Context Processing
     with app.app_context():
         models.db.drop_all()
         models.db.create_all()
@@ -87,7 +91,7 @@ def init_account_json():
         else: 
             accts_json = json.loads(r)
         accts_json = sanitize_account_json(accts_json)
-        if not utils.account_exists(accts_json, "Admin"):
+        if not dbutils.account_exists(accts_json, "Admin"):
             accts_json.append(admin_json)
 
-    utils.fill_account_json_in_db(accts_json)
+    dbutils.fill_account_json_in_db(accts_json)
