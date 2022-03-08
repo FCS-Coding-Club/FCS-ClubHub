@@ -29,10 +29,10 @@ def load_user(user_id):
 def load_user_memberships(user_id):
     return Member.query.filter_by(user_id=user_id)
 
-# Loads the clubs a user is in, and returns a list of dictionaries:
-# The "club" key holds the club object as defined in the SQLAlchemy Schema.
-# The "isLeader" key holds a boolean of whether the member is a leader or not.
-# Feel free to change this if you have a cleaner way to structure it.
+"""Loads the clubs a user is in, and returns a list of dictionaries:
+The "club" key holds the club object as defined in the SQLAlchemy Schema.
+The "isLeader" key holds a boolean of whether the member is a leader or not.
+Feel free to change this if you have a cleaner way to structure it."""
 def load_user_clubs(user_id):
     memberships = load_user_memberships(user_id)
     clubs = []

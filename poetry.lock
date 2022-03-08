@@ -125,6 +125,18 @@ bcrypt = "*"
 Flask = "*"
 
 [[package]]
+name = "flask-cors"
+version = "3.0.10"
+description = "A Flask extension adding a decorator for CORS support"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = ">=0.9"
+Six = "*"
+
+[[package]]
 name = "flask-login"
 version = "0.5.0"
 description = "User session management for Flask"
@@ -378,7 +390,7 @@ email = ["email-validator"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "2833bac414d746b1355fe07772811761406ab1a8cfdea2e6499625428ce55ee4"
+content-hash = "f833cb5472385cabfdccc95a3dcad0a7077594b69135c0184ced558825b8e325"
 
 [metadata.files]
 atomicwrites = [
@@ -472,6 +484,10 @@ flask = [
 ]
 flask-bcrypt = [
     {file = "Flask-Bcrypt-0.7.1.tar.gz", hash = "sha256:d71c8585b2ee1c62024392ebdbc447438564e2c8c02b4e57b56a4cafd8d13c5f"},
+]
+flask-cors = [
+    {file = "Flask-Cors-3.0.10.tar.gz", hash = "sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de"},
+    {file = "Flask_Cors-3.0.10-py2.py3-none-any.whl", hash = "sha256:74efc975af1194fc7891ff5cd85b0f7478be4f7f59fe158102e91abb72bb4438"},
 ]
 flask-login = [
     {file = "Flask-Login-0.5.0.tar.gz", hash = "sha256:6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b"},

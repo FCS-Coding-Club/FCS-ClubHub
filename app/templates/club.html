@@ -36,7 +36,9 @@
             <hr>
             <div class="container bg-light">
                 <div class="row">
-                    <h1 class="text-center">{{current_month}} {{current_year}}</h1>
+                    <button type="button" class="btn btn-light col-1" onclick="prevMonth()">&lsaquo;</button>
+                    <h1 class="text-center col-10" id="cal_title"></h1>
+                    <button type="button" class="btn btn-light col-1" onclick="nextMonth()">&rsaquo;</button>
                     <hr class="mb-0">
                 </div>
                 <div class="row row-cols-7 text-center">
@@ -51,7 +53,7 @@
                 {% for row in range(6) %}
                 <div class="row row-cols-7 text-center">
                     {% for col in range(7) %}
-                    <div class="col py-2">{{calendar[(row,col)]}}</div>
+                    <div class="col py-2" id="cal{{row}}{{col}}"></div>
                     {% endfor %}
                 </div>
                 {% endfor %}
@@ -63,4 +65,72 @@
         </div>
     </div>
 </div>
+<script>
+    // Club Calendar Scripting
+    d = new Date();
+    current_month = d.getMonth() + 1;
+    current_year = d.getFullYear();
+    months = ["January",
+    "February", "March",
+    "April", "May","June",
+    "July","August","September",
+    "October","November","December"]
+    cal_title = document.getElementById("cal_title")
+    //onLoad func call
+    updateCalendar(current_month, current_year)
+    //onClick of next month button
+    function nextMonth() {
+        if (current_month == 12) {
+            current_year++;
+            current_month = 1;
+            
+        } else {
+            current_month++;
+        }
+        updateCalendar(current_month, current_year) 
+    }
+    //onClick of previous month button
+    function prevMonth() {
+        if (current_month == 1) {
+            current_year--;
+            current_month = 12;
+            
+        } else {
+            current_month--;
+        }
+        updateCalendar(current_month, current_year)         
+    }
+    //general updateCalendar function
+    function updateCalendar(month, year) {
+        //calls api using fetch, parses json, and fills in calendar
+        fetch(`/api/calendar/month_json?month=${month}&year=${year}`, {
+            method: 'GET',
+            credentials: "same-origin"
+        })
+        .then((response) => response.json())
+        .then((cal_json) => {
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 7; col++) {
+                    entry = document.getElementById(`cal${row}${col}`)
+                    /* calendar formatting is done server-side.
+                    json keys are stored as "xy" where x = calendar 
+                    row, y = calendar column. */
+                    json_val = cal_json[`${row}${col}`]
+                    day = json_val['day']
+                    isMeeting = json_val['isMeeting']
+                    /* If the key is undefined for whatever reason, this
+                    will just leave the calendar box blank instead of
+                    actually writing the word "undefined" */
+                    entry.innerHTML = day !== undefined ? day : ""
+                    //Highlight meetings with green background
+                    entry.classList.remove("bg-success")
+                    if (isMeeting) {entry.classList.add("bg-success")}
+                }
+            }
+            // Change calendar title
+            cal_title.innerHTML = `${months[current_month-1]} ${current_year}`
+        })
+        .catch(error => console.log(error))
+    }
+</script>
 {% endblock content %}

@@ -105,7 +105,7 @@ def handle_needs_login():
     flash("You have to be logged in to access this page.")
     return redirect(url_for('accounts.login', next=request.endpoint))
 
-# Redirect Destination
+# Redirect Destination (Does not work)
 def redirect_dest(fallback):
     dest = request.args.get('next')
     try:

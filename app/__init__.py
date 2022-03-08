@@ -1,14 +1,11 @@
-from fileinput import filename
 import json
 import os
-from pydoc import importfile
-from click import style
-from flask import Flask, render_template
-from flask_login import LoginManager
+from flask import Flask
+from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
 import sass
 from .models import dbutils, models, test_db
-from .views import accounts, community
+from .views import accounts
 from .utils import render_functions
 
 isDebug = os.environ.get("DEBUG")
@@ -22,6 +19,9 @@ def create_app():
     # Configuration
     app_config(app)
     register_blueprints(app)
+    # CORS
+    cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
     # CSRF 
     csrf = CSRFProtect(app)
     csrf.init_app(app)
@@ -60,11 +60,13 @@ def compile_sass():
         css.write(compiled)
 
 # Blueprint Registration Function
-def register_blueprints(app):    
+def register_blueprints(app): 
+    from .api import calendar
+
     from .views import accounts
     from .views import community
     from .views import general
-    for blueprint in [accounts.mod, community.mod, general.mod]:
+    for blueprint in [accounts.mod, calendar.mod, community.mod, general.mod]:
         app.register_blueprint(blueprint)
 
 admin_json = {
