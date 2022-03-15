@@ -19,8 +19,14 @@ Flask-Bcrypt = "^0.7.1"
 Flask-Login = "^0.5.0"
 libsass = "^0.21.0"
 Flask-Cors = "^3.0.10"
+icalendar = "^4.0.9"
+icalevents = "^0.1.25"
+python-dateutil = "^2.8.2"
+jicson = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
+pylint = "^2.12.2"
+autopep8 = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

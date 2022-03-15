@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4">
+        <div class="col-lg-4 col-sm-12">
             <h2 class="mt-3">{{current_club.name}}</h2>
             <hr>
             <p>{{current_club.desc}}</p>
@@ -31,10 +31,10 @@
             {% endfor %}
             </div>
         </div>
-        <div class="col-4 align-content-center"> 
+        <div class="col-lg-4 col-sm-12 align-content-center"> 
             <h2 class="text-center my-3">Meetings</h2>
             <hr>
-            <div class="container bg-light">
+            <div class="container bg-light shadow-lg">
                 <div class="row">
                     <button type="button" class="btn btn-light col-1" onclick="prevMonth()">&lsaquo;</button>
                     <h1 class="text-center col-10" id="cal_title"></h1>
@@ -53,13 +53,20 @@
                 {% for row in range(6) %}
                 <div class="row row-cols-7 text-center">
                     {% for col in range(7) %}
-                    <div class="col py-2" id="cal{{row}}{{col}}"></div>
+                    <div class="col py-2 px-0">
+                        <button type="button"
+                        class="w-100 h-100 btn m-0"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Test"id="cal{{row}}{{col}}">
+                        </button>
+                    </div>
                     {% endfor %}
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-4 col-sm-12">
             <h2 class="text-center my-3">Announcements</h2>
             <hr>
         </div>
@@ -102,8 +109,9 @@
     }
     //general updateCalendar function
     function updateCalendar(month, year) {
+        document.querySelectorAll('[data-toggle="tooltip"]').forEach(e => e.tooltip())
         //calls api using fetch, parses json, and fills in calendar
-        fetch(`/api/calendar/month_json?month=${month}&year=${year}`, {
+        fetch(`/api/calendar/month_meetings?club={{current_club.id}}&month=${month}&year=${year}`, {
             method: 'GET',
             credentials: "same-origin"
         })

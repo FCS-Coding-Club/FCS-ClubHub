@@ -2,7 +2,6 @@ import bcrypt
 from flask import Blueprint, render_template, redirect, request, flash
 from flask.helpers import url_for
 from flask_login import current_user, LoginManager, login_user, logout_user
-from flask_login.utils import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.simple import BooleanField
@@ -105,7 +104,8 @@ def handle_needs_login():
     flash("You have to be logged in to access this page.")
     return redirect(url_for('accounts.login', next=request.endpoint))
 
-# Redirect Destination (Does not work)
+# TODO: Fix this
+# Redirect Destination
 def redirect_dest(fallback):
     dest = request.args.get('next')
     try:

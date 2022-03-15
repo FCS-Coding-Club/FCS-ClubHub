@@ -119,6 +119,9 @@ dmypy.json
 # Jetbrains
 .idea/
 
+# VSCode
+.vscode/
+
 # Backup files
 *~
 

@@ -5,8 +5,6 @@ from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
-from datetime import datetime
-import calendar
 from app.models import dbutils, models
 
 mod = Blueprint('community', __name__, template_folder='../templates')

@@ -1,4 +1,5 @@
-import bcrypt
+from datetime import datetime, timezone
+from dateutil import rrule
 from .models import User, Club, Member, Announcement, Account, db
 from app.views import accounts
 # This script configures the database with dummy data for testing purposes
@@ -26,6 +27,22 @@ def fill_with_test_data(db, ctx):
         
         for club in test_clubs:
             db.session.add(club)
+            club.add_event(
+            start_date=datetime(2022, 3, 1, 10, 30, 0), 
+            end_date=datetime(2022, 3, 1, 12, 30, 0), 
+            summary="Test Event",
+            desc="Testing Testing 1 2",
+            recurrence_rule={
+                'freq': 'daily', 
+                'interval': 2, 
+                'until': datetime(2022, 3, 11, 0, 0, 0).astimezone(timezone.utc)
+                }
+            )
+            event = club.get_events_by_summary("Test Event")[0]
+            club.edit_event(event['uid'], {
+                'dtstart': datetime(2022, 2, 25, 10, 30, 0).astimezone(timezone.utc),
+                'dtend': datetime(2022, 2, 25, 11, 30, 0).astimezone(timezone.utc)
+            })
             db.session.commit()
         
         test_announcements = define_relational_test_data()
@@ -37,6 +54,7 @@ def fill_with_test_data(db, ctx):
             db.session.commit()
 
 def register_admin_user():
+    # Ask Sean what this is de-hashed
     pw_hash = b'$2b$12$HDFalMQSEb3vbifqn5pvUOKv4Q/S2JriwQ78STfaBLZUZSVdCFmmG'
     # Add user data to user table
     admin_email = "admin@"+accounts.fcs_suffix

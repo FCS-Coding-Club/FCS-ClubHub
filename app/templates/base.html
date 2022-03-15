@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!--BOOTSTRAP-->
-    <link rel="stylesheet" href={{ url_for('static', filename='css/bootstrap_min.css') }}>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/bootstrap_min.css') }}>
     {% block head %}
         <title>{% block title %}{% endblock %}</title>
     {% endblock %}
@@ -15,9 +15,6 @@
 <a href="/profile/{{user.id}}" class="text-decoration-none">
     <div class="userimg rounded-circle fs-6 text-black shadow-sm">{{user.fname[0] + user.lname[0]}}</div>
 </a>
-{% endmacro %}
-{% macro big_profile(user)%}
-<div class="profilephoto rounded-circle text-black">{{user.fname[0] + user.lname[0]}}</div>
 {% endmacro %}
 <body class="w-100 h-100">
     <div class="d-flex flex-column min-vh-100 vh-100">

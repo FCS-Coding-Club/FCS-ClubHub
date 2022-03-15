@@ -1,5 +1,8 @@
 from .models import Account, Club, db, Member, User
 from app.views.accounts import login_manager
+
+# JSON Funcs
+
 def account_exists(json, name):
     for e in json:
         if e["NAME"] == name:
