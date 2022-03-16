@@ -4,7 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
 import sass
-from .models import dbutils, models, test_db
+from .models import dbutils, models, mock_db
 from .views import accounts
 from .utils import render_functions
 
@@ -40,7 +40,7 @@ def create_app():
         init_account_json()
         # Adds dummy data for dev purposes
         if isDebug or isTesting:
-            test_db.fill_with_test_data(models.db, app.app_context())
+            mock_db.fill_with_test_data(models.db, app.app_context())
     return app
 
 
