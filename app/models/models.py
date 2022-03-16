@@ -99,7 +99,7 @@ class Club(db.Model):
         return event_filter
 
     # Returns event with uid param (UIDs shouldn't be duplicate)
-    def get_event_by_uid(self, uid: str, cal=None) -> Event | None:
+    def get_event_by_uid(self, uid: str, cal=None):
         # Calendar reference is needed for editing / removing
         if not cal:
             cal = Calendar.from_ical(self.calendar)
