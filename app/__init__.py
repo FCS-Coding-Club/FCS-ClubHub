@@ -11,6 +11,7 @@ from .utils import render_functions
 isDebug = os.environ.get("DEBUG")
 isTesting = os.environ.get("TESTING")
 
+
 def create_app():
     # Compile Sass
     compile_sass()
@@ -20,7 +21,7 @@ def create_app():
     app_config(app)
     register_blueprints(app)
     # CORS
-    cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
     # CSRF 
     csrf = CSRFProtect(app)
@@ -42,25 +43,28 @@ def create_app():
             test_db.fill_with_test_data(models.db, app.app_context())
     return app
 
+
 # App configuration Function
 def app_config(app):
     config = os.environ.get('FLASK_CONFIG')
     app.config.from_object(config)
     app.config.update(dict(
-    SECRET_KEY=os.environ.get("SECRET_KEY"),
-    WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///../clubhub.db',
-    SQLALCHEMY_TRACK_MODIFICATIONS = False))
+        SECRET_KEY=os.environ.get("SECRET_KEY"),
+        WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
+        SQLALCHEMY_DATABASE_URI='sqlite:///../clubhub.db',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False))
+
 
 # Sass Compiling Function
 def compile_sass():
     print("Compiling Sass...")
-    compiled = sass.compile(filename=('app/static/sass/main.scss'), include_paths=("bootstrap"))
+    compiled = sass.compile(filename='app/static/sass/main.scss', include_paths="bootstrap")
     with open('app/static/css/bootstrap_min.css', 'w') as css:
         css.write(compiled)
 
+
 # Blueprint Registration Function
-def register_blueprints(app): 
+def register_blueprints(app):
     from .api import calendar
 
     from .views import accounts
@@ -69,18 +73,22 @@ def register_blueprints(app):
     for blueprint in [accounts.mod, calendar.mod, community.mod, general.mod]:
         app.register_blueprint(blueprint)
 
+
 admin_json = {
     "NAME": "Admin",
     "GRADE": "12",
-    "EMAIL": "admin@"+accounts.fcs_suffix
+    "EMAIL": "admin@" + accounts.fcs_suffix
 }
 
-def sanitize_account_json(json):
-    for e in json:
+
+def sanitize_account_json(account_json):
+    for e in account_json:
         # TODO: Add Name Sanitation
         e["GRADE"] = e["GRADE"].replace("GRADE ", "")
         e["EMAIL"] = e["EMAIL"].lower()
-    return json
+    return account_json
+
+
 # Checks for a file accts.json, if not, creates one, and then fills clubhub.db with json data
 def init_account_json():
     # Create File if it does not exist
@@ -90,7 +98,7 @@ def init_account_json():
         r = file.read()
         if r == "":
             accts_json = []
-        else: 
+        else:
             accts_json = json.loads(r)
         accts_json = sanitize_account_json(accts_json)
         if not dbutils.account_exists(accts_json, "Admin"):

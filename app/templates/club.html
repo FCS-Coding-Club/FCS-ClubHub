@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 col-sm-12">
+        <div class="col-lg-4 col-md-6 col-sm-12">
             <h2 class="mt-3">{{current_club.name}}</h2>
             <hr>
             <p>{{current_club.desc}}</p>
@@ -31,7 +31,7 @@
             {% endfor %}
             </div>
         </div>
-        <div class="col-lg-4 col-sm-12 align-content-center"> 
+        <div class="col-lg-4 col-md-6 col-sm-12 align-content-center">
             <h2 class="text-center my-3">Meetings</h2>
             <hr>
             <div class="container bg-light shadow-lg">
@@ -58,7 +58,8 @@
                         class="w-100 h-100 btn m-0"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
-                        title="Test"id="cal{{row}}{{col}}">
+                        title="Test"
+                        id="cal{{row}}{{col}}">
                         </button>
                     </div>
                     {% endfor %}
@@ -66,7 +67,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-lg-4 col-sm-12">
+        <div class="col-lg-4 col-md-6 col-sm-12">
             <h2 class="text-center my-3">Announcements</h2>
             <hr>
         </div>
@@ -77,20 +78,16 @@
     d = new Date();
     current_month = d.getMonth() + 1;
     current_year = d.getFullYear();
-    months = ["January",
-    "February", "March",
-    "April", "May","June",
-    "July","August","September",
-    "October","November","December"]
-    cal_title = document.getElementById("cal_title")
+
     //onLoad func call
     updateCalendar(current_month, current_year)
+
     //onClick of next month button
     function nextMonth() {
-        if (current_month == 12) {
+        if (current_month === 12) {
             current_year++;
             current_month = 1;
-            
+
         } else {
             current_month++;
         }
@@ -98,7 +95,7 @@
     }
     //onClick of previous month button
     function prevMonth() {
-        if (current_month == 1) {
+        if (current_month === 1) {
             current_year--;
             current_month = 12;
             
@@ -119,13 +116,13 @@
         .then((cal_json) => {
             for (let row = 0; row < 6; row++) {
                 for (let col = 0; col < 7; col++) {
-                    entry = document.getElementById(`cal${row}${col}`)
+                    let entry = document.getElementById(`cal${row}${col}`)
                     /* calendar formatting is done server-side.
                     json keys are stored as "xy" where x = calendar 
                     row, y = calendar column. */
-                    json_val = cal_json[`${row}${col}`]
-                    day = json_val['day']
-                    isMeeting = json_val['isMeeting']
+                    let json_val = cal_json[`${row}${col}`]
+                    let day = json_val['day']
+                    let isMeeting = json_val['isMeeting']
                     /* If the key is undefined for whatever reason, this
                     will just leave the calendar box blank instead of
                     actually writing the word "undefined" */
@@ -136,6 +133,12 @@
                 }
             }
             // Change calendar title
+            const months = ["January",
+            "February", "March",
+            "April", "May","June",
+            "July","August","September",
+            "October","November","December"]
+            let cal_title = document.getElementById("cal_title")
             cal_title.innerHTML = `${months[current_month-1]} ${current_year}`
         })
         .catch(error => console.log(error))

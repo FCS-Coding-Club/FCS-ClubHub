@@ -9,6 +9,7 @@ render_functions = {
     "current_year": datetime.today().strftime('%Y')
 }
 
+
 def gen_barebones_ical(name, desc):
     cal = Calendar()
     cal.add('prodid', '-//FCCC//FCS ClubHub//')

@@ -2,12 +2,11 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    <script src="https://kit.fontawesome.com/ba4069388d.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
         function password_show_hide() {
-            var x = document.getElementById("password-form");
-            var show_text = document.getElementById("show");
-            var hide_text = document.getElementById("hide");
+            let x = document.getElementById("password-form");
+            let show_text = document.getElementById("show");
+            let hide_text = document.getElementById("hide");
             hide_text.classList.remove("d-none");
             if (x.type === "password") {
                 x.type = "text";
@@ -28,7 +27,7 @@
             Invalid Form, Please Try Again
         </div>
     {% endif %}
-    <div class="h-100 row align-items-center justify-content-center">
+    <div class=" w-100 h-100 row align-items-center justify-content-center">
         <form action="/login" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group my-2">
@@ -43,10 +42,10 @@
                 {% for error in form.password.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                <div class="col-11 p-0">
+                <div class="col-10 p-0">
                     {{form.password(size=30, id="password-form", class="form-control bg-light border-dark", **{'type': 'password'})}}
                 </div>
-                <div class="col-1 border border-dark rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
+                <div class="col-2 border border-dark rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
                     <p class="my-auto mx-auto" id="show">Show</p>
                     <p class="d-none my-auto mx-auto" id="hide">Hide</p>
                 </div>
