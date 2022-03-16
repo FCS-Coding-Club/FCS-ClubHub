@@ -123,6 +123,10 @@
                     let json_val = cal_json[`${row}${col}`]
                     let day = json_val['day']
                     let isMeeting = json_val['isMeeting']
+                    let title = ""
+                    if ('names' in json_val) {
+                       title = json_val['names'].join(", ")
+                    }
                     /* If the key is undefined for whatever reason, this
                     will just leave the calendar box blank instead of
                     actually writing the word "undefined" */
@@ -130,6 +134,8 @@
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
                     if (isMeeting) {entry.classList.add("bg-success")}
+                    // Change Tooltip Title
+                    entry.setAttribute("title", title)
                 }
             }
             // Change calendar title

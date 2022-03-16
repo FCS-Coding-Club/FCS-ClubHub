@@ -29,9 +29,13 @@ def gen_calendar_json(club, month, year):
             # Bool for if there's a meeting
             cal_dictionary[f"{current_row}{weekday}"]["isMeeting"] = True
             # List of meetings on that day
-            cal_dictionary[f"{current_row}{weekday}"]["names"] = [e.summary for e in events]
-            # Used for frontend API calls to "/api/calendar/meeting"
-            cal_dictionary[f"{current_row}{weekday}"]["uids"] = [e.uid for e in events]
+            if not events:
+                cal_dictionary[f"{current_row}{weekday}"]["names"] = []
+                cal_dictionary[f"{current_row}{weekday}"]["uids"] = []
+            else:
+                cal_dictionary[f"{current_row}{weekday}"]["names"] = [e.summary for e in events]
+                # Used for frontend API calls to "/api/calendar/meeting"
+                cal_dictionary[f"{current_row}{weekday}"]["uids"] = [e.uid for e in events]
         if weekday == 6:
             current_row += 1
     return json.dumps(cal_dictionary)

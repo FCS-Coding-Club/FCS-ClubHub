@@ -73,7 +73,7 @@ class Club(db.Model):
         # Get event, copy event to mutate
         event = self.get_event_by_uid(uid, c)
         if not event:
-            return None
+            pass
         event_new = event
         # Change new event params according to changes dictionary
         for change_key in changes:
