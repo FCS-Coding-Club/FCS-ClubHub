@@ -5,10 +5,10 @@ from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
-
-from app.models import models, utils
+from app.models import dbutils, models
 
 mod = Blueprint('community', __name__, template_folder='../templates')
+
 
 class UniqueClubName:
     def __call__(self, form, field):
@@ -16,22 +16,25 @@ class UniqueClubName:
         if exists:
             raise ValidationError(f'Club with name {field.data} already exists')
 
+
 class RegisterClubForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30), UniqueClubName()])
-    desc = TextAreaField('Description', validators=[DataRequired(),Length(max=280)])
+    desc = TextAreaField('Description', validators=[DataRequired(), Length(max=280)])
+
 
 # Profile Routing
 @mod.route("/profile/<userid>", methods=["GET"])
 @login_required
 def profile(userid):
-    profile_user = utils.load_user(userid)
-    user_clubs = utils.load_user_clubs(userid)
+    profile_user = dbutils.load_user(userid)
+    user_clubs = dbutils.load_user_clubs(userid)
     if profile_user is not None:
-        return render_template('profile.html', 
-        profile_user=profile_user, 
-        current_user=current_user, 
-        user_clubs=user_clubs)
+        return render_template('profile.html',
+                               profile_user=profile_user,
+                               current_user=current_user,
+                               user_clubs=user_clubs)
     abort(404)
+
 
 # Register Club Form
 @mod.route("/register_club", methods=["GET", "POST"])
@@ -57,11 +60,11 @@ def register_club():
 @mod.route("/club/<clubid>", methods=["GET"])
 @login_required
 def club(clubid):
-    current_club = utils.load_club(clubid)
+    current_club = dbutils.load_club(clubid)
     if current_club is not None:
-        members = utils.load_club_members(clubid)
-        return render_template('club.html', 
-        current_club=current_club, 
-        current_user=current_user, 
-        members=members)
+        members = dbutils.load_club_members(clubid)
+        return render_template('club.html',
+                               current_club=current_club,
+                               current_user=current_user,
+                               members=members)
     abort(404)

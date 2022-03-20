@@ -6,8 +6,9 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-3">
-            <h2>{{current_club.name}}</h2>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2 class="mt-3">{{current_club.name}}</h2>
+            <hr>
             <p>{{current_club.desc}}</p>
             <h3>Leaders</h3>
             <div class=".row-cols-3">
@@ -15,19 +16,168 @@
                 {% if member.isLeader%}
                 <div class="col">{{profile(member.user)}}</div>
                 {% endif %}
+                {% else %}
+                <p>No Leaders... is this Anarchy Club?</p>
             {% endfor %}
             </div>
+            <h3>Members</h3>
+            <div class=".row-cols-3">
             {% for member in members%}
                 {% if not member.isLeader%}
                 <div class="col">{{profile(member.user)}}</div>
                 {% endif %}
+                {% else %}
+                <p>No Members...I'm sure people will join soon :)</p>
             {% endfor %}
-            <h3>Members</h3>
+            </div>
         </div>
-        <div class="col-3"> 
+        <div class="col-lg-4 col-md-6 col-sm-12 align-content-center">
+            <h2 class="text-center my-3">Meetings</h2>
+            <hr>
+            <div class="container bg-light shadow-lg">
+                <div class="row">
+                    <button type="button" class="btn btn-light col-1" onclick="prevMonth()">&lsaquo;</button>
+                    <h1 class="text-center col-10" id="cal_title"></h1>
+                    <button type="button" class="btn btn-light col-1" onclick="nextMonth()">&rsaquo;</button>
+                    <hr class="mb-0">
+                </div>
+                <div class="row row-cols-7 text-center">
+                    <div class="col py-2">M</div>
+                    <div class="col py-2">T</div>
+                    <div class="col py-2">W</div>
+                    <div class="col py-2">T</div>
+                    <div class="col py-2">F</div>
+                    <div class="col py-2">S</div>
+                    <div class="col py-2">S</div>
+                </div>
+                {% for row in range(6) %}
+                <div class="row row-cols-7 text-center">
+                    {% for col in range(7) %}
+                    <div class="col py-2 px-1">
+                        <button type="button"
+                        class="w-100 h-100 btn m-0"
+                        id="cal{{row}}{{col}}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#Modal{{row}}{{col}}">
+                        </button>
+                    </div>
+                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content bg-light">
+                            <div class="modal-header border-secondary">
+                              <h5 class="modal-title" id="ModalLabel{{row}}{{col}}"></h5>
+                            </div>
+                            <div class="modal-body" id="ModalContent{{row}}{{col}}">
+                            </div>
+                            <div class="modal-footer border-secondary">
+                              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        <div class="col-3">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2 class="text-center my-3">Announcements</h2>
+            <hr>
         </div>
     </div>
 </div>
+<script>
+    // Club Calendar Scripting
+    d = new Date();
+    current_month = d.getMonth() + 1;
+    current_year = d.getFullYear();
+
+    //onLoad func call
+    updateCalendar(current_month, current_year)
+
+    //onClick of next month button
+    function nextMonth() {
+        if (current_month === 12) {
+            current_year++;
+            current_month = 1;
+
+        } else {
+            current_month++;
+        }
+        updateCalendar(current_month, current_year) 
+    }
+    //onClick of previous month button
+    function prevMonth() {
+        if (current_month === 1) {
+            current_year--;
+            current_month = 12;
+            
+        } else {
+            current_month--;
+        }
+        updateCalendar(current_month, current_year)         
+    }
+    //general updateCalendar function
+    function updateCalendar(month, year) {
+        document.querySelectorAll('[data-toggle="tooltip"]').forEach(e => e.tooltip())
+        //calls api using fetch, parses json, and fills in calendar
+        fetch(`/api/calendar/month_meetings?club={{current_club.id}}&month=${month}&year=${year}`, {
+            method: 'GET',
+            credentials: "same-origin"
+        })
+        .then((response) => response.json())
+        .then((cal_json) => {
+            // Change calendar title
+            const months = ["January",
+            "February", "March",
+            "April", "May","June",
+            "July","August","September",
+            "October","November","December"]
+            let cal_title = document.getElementById("cal_title")
+            let month_name = months[current_month-1]
+            cal_title.innerText = `${month_name} ${current_year}`
+            // Change every day's data
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 7; col++) {
+                    let entry = document.getElementById(`cal${row}${col}`)
+                    /* calendar formatting is done server-side.
+                    json keys are stored as "xy" where x = calendar 
+                    row, y = calendar column. */
+                    let json_val = cal_json[`${row}${col}`]
+                    let day = json_val['day']
+                    let isMeeting = json_val['isMeeting']
+                    let meetingNames = json_val['names']
+                    let meetingDescriptions = json_val['descriptions']
+                    /* If the key is undefined for whatever reason, this
+                    will just leave the calendar box blank instead of
+                    actually writing the word "undefined" */
+                    entry.innerText = day !== undefined ? day : ""
+                    //Highlight meetings with green background
+                    entry.classList.remove("bg-success")
+                    entry.disabled = !isMeeting
+                    if (isMeeting) {
+                        entry.classList.add("bg-success")
+                        // Change Modal Title
+                        let meetingNum = meetingNames.length
+                        let title = `${meetingNum} ${meetingNum > 1 ? "meetings" : "meeting"} on ${month_name} ${day}, ${current_year}`
+                        let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                        modalLabel.innerText = title
+                        //Change Modal Content
+                        let modalContent = document.getElementById(`ModalContent${row}${col}`)
+                        modalContent.innerHTML = ""
+                        for (let e = 0; e < meetingNum; e++) {
+                            let meetingHeader = document.createElement("b")
+                            meetingHeader.innerText = meetingNames[e]
+                            modalContent.appendChild(meetingHeader)
+                            let meetingDescription = document.createElement("p")
+                            meetingDescription.innerText = meetingDescriptions[e]
+                            modalContent.appendChild(meetingDescription)
+                        }
+                    }
+                }
+            }
+        })
+        .catch(error => console.log(error))
+    }
+</script>
 {% endblock content %}

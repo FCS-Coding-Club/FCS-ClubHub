@@ -1,7 +1,6 @@
 import os
 import random
 import string
-import sass
 from app import create_app
 
 # This file will run a Flask's WSGI server for development purposes. We will need to set up our own WSGI for production.

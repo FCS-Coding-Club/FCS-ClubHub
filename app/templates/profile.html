@@ -4,38 +4,35 @@
 {% endblock %}
 {% block title %}ClubHub - {{profile_user.fname}} {{profile_user.lname}}{% endblock %}
 {% block content %}
+{% macro big_profile(user)%}
+    <div class="profilephoto rounded-circle text-black mt-3">{{user.fname[0] + user.lname[0]}}</div>
+{% endmacro %}
 <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/profile.css') }}>
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
+        <div class="col-lg-4 col-sm-12">
             {{big_profile(profile_user)}}
             <div style="text-align: center;">
                 {{profile_user.fname + " " + profile_user.lname}}
             </div>
         </div>
-        <div class="col">
-            <div class="row">
-                <h3>
-                    is a member of...
-                </h3>
-                {% for user_club in user_clubs %}
-                {% if not user_club['isLeader'] %}
-                <a href="/club/{{user_club['club'].club_id}}">{{user_club['club'].name}}</a>
-                {% endif %}
-                {% endfor %}
-            </div>
+        <div class="col-lg-4 col-sm-12">
+            <h3 class="mt-3">is a member of...</h3>
+            <hr>
+            {% for user_club in user_clubs %}
+            {% if not user_club['isLeader'] %}
+            <a href="/club/{{user_club.get('club').club_id}}" class="text-decoration-none">{{user_club['club'].name}}</a>
+            {% endif %}
+            {% endfor %}
         </div>
-        <div class="col">
-            <div class="row">
-                <h3>
-                    is a leader of...
-                </h3>
-                {% for user_club in user_clubs %}
-                {% if user_club['isLeader'] %}
-                <a href="/club/{{user_club['club'].id}}">{{user_club['club'].name}}</a>
-                {% endif %}
-                {% endfor %}
-            </div>
+        <div class="col-lg-4 col-sm-12">
+            <h3 class="mt-3">is a leader of...</h3>
+            <hr>
+            {% for user_club in user_clubs %}
+            {% if user_club['isLeader'] %}
+            <a href="/club/{{user_club['club'].id}}" class="text-decoration-none">{{user_club['club'].name}}</a>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
