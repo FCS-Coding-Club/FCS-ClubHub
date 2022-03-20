@@ -96,7 +96,8 @@ class LoginForm(FlaskForm):
 def register():
     form = RegisterForm()
     if request.method == 'GET':
-        return render_template("register.html", form=form)
+        next_arg = request.args.get('next')
+        return render_template("register.html", form=form, next=next_arg)
     if request.method == 'POST':
         # This is where the registration request is handled
         if form.validate_on_submit():
@@ -117,18 +118,15 @@ def register():
 @login_manager.unauthorized_handler
 def handle_needs_login():
     flash("You have to be logged in to access this page.")
-    return redirect(url_for('accounts.login', next=request.endpoint))
+    return redirect('/login?next=' + request.path)
 
 
-# TODO: Fix this
 # Redirect Destination
 def redirect_dest(fallback):
     dest = request.args.get('next')
-    try:
-        dest_url = url_for(dest)
-    except ValueError:
-        return redirect(fallback)
-    return redirect(dest_url)
+    if dest:
+        return redirect(dest)
+    return redirect(fallback)
 
 
 # Login Routing
@@ -136,14 +134,15 @@ def redirect_dest(fallback):
 def login():
     form = LoginForm()
     if request.method == 'GET':
-        return render_template("login.html", form=form)
+        next_arg = request.args.get('next')
+        return render_template("login.html", form=form, next=next_arg)
     if request.method == 'POST':
         # This is where the login request is handled
         if form.validate_on_submit():
             user = models.User.query.filter_by(email=form.email.data).first()
             login_user(user, remember=form.remember_me.data)
             flash('Logged in successfully.')
-            return redirect(url_for('community.profile', userid=current_user.id))
+            return redirect_dest(fallback=url_for('community.profile', userid=current_user.id))
         # This person did not successfully enter the form
         return render_template('login.html', form=form)
 
