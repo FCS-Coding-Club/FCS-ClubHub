@@ -53,14 +53,27 @@
                 {% for row in range(6) %}
                 <div class="row row-cols-7 text-center">
                     {% for col in range(7) %}
-                    <div class="col py-2 px-0">
+                    <div class="col py-2 px-1">
                         <button type="button"
                         class="w-100 h-100 btn m-0"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Test"
-                        id="cal{{row}}{{col}}">
+                        id="cal{{row}}{{col}}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#Modal{{row}}{{col}}">
                         </button>
+                    </div>
+                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content bg-light">
+                            <div class="modal-header border-secondary">
+                              <h5 class="modal-title" id="ModalLabel{{row}}{{col}}"></h5>
+                            </div>
+                            <div class="modal-body" id="ModalContent{{row}}{{col}}">
+                            </div>
+                            <div class="modal-footer border-secondary">
+                              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
@@ -114,6 +127,16 @@
         })
         .then((response) => response.json())
         .then((cal_json) => {
+            // Change calendar title
+            const months = ["January",
+            "February", "March",
+            "April", "May","June",
+            "July","August","September",
+            "October","November","December"]
+            let cal_title = document.getElementById("cal_title")
+            let month_name = months[current_month-1]
+            cal_title.innerText = `${month_name} ${current_year}`
+            // Change every day's data
             for (let row = 0; row < 6; row++) {
                 for (let col = 0; col < 7; col++) {
                     let entry = document.getElementById(`cal${row}${col}`)
@@ -123,29 +146,36 @@
                     let json_val = cal_json[`${row}${col}`]
                     let day = json_val['day']
                     let isMeeting = json_val['isMeeting']
-                    let title = ""
-                    if ('names' in json_val) {
-                       title = json_val['names'].join(", ")
-                    }
+                    let meetingNames = json_val['names']
+                    let meetingDescriptions = json_val['descriptions']
                     /* If the key is undefined for whatever reason, this
                     will just leave the calendar box blank instead of
                     actually writing the word "undefined" */
-                    entry.innerHTML = day !== undefined ? day : ""
+                    entry.innerText = day !== undefined ? day : ""
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
-                    if (isMeeting) {entry.classList.add("bg-success")}
-                    // Change Tooltip Title
-                    entry.setAttribute("title", title)
+                    entry.disabled = !isMeeting
+                    if (isMeeting) {
+                        entry.classList.add("bg-success")
+                        // Change Modal Title
+                        let meetingNum = meetingNames.length
+                        let title = `${meetingNum} ${meetingNum > 1 ? "meetings" : "meeting"} on ${month_name} ${day}, ${current_year}`
+                        let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                        modalLabel.innerText = title
+                        //Change Modal Content
+                        let modalContent = document.getElementById(`ModalContent${row}${col}`)
+                        modalContent.innerHTML = ""
+                        for (let e = 0; e < meetingNum; e++) {
+                            let meetingHeader = document.createElement("b")
+                            meetingHeader.innerText = meetingNames[e]
+                            modalContent.appendChild(meetingHeader)
+                            let meetingDescription = document.createElement("p")
+                            meetingDescription.innerText = meetingDescriptions[e]
+                            modalContent.appendChild(meetingDescription)
+                        }
+                    }
                 }
             }
-            // Change calendar title
-            const months = ["January",
-            "February", "March",
-            "April", "May","June",
-            "July","August","September",
-            "October","November","December"]
-            let cal_title = document.getElementById("cal_title")
-            cal_title.innerHTML = `${months[current_month-1]} ${current_year}`
         })
         .catch(error => console.log(error))
     }

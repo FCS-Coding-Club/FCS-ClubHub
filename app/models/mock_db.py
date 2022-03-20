@@ -45,6 +45,17 @@ def fill_with_test_data(database, ctx):
                 'dtstart': datetime(2022, 2, 25, 10, 30, 0).astimezone(timezone.utc),
                 'dtend': datetime(2022, 2, 25, 11, 30, 0).astimezone(timezone.utc)
             })
+            club.add_event(
+                start_date=datetime(2022, 2, 28, 11, 30, 0),
+                end_date=datetime(2022, 2, 28, 12, 30, 0),
+                summary="Test Event 2",
+                desc="Testing Testing 3 4 5 6",
+                recurrence_rule={
+                    'freq': 'daily',
+                    'interval': 1,
+                    'until': datetime(2022, 3, 22, 0, 0, 0).astimezone(timezone.utc)
+                }
+            )
             database.session.commit()
 
         test_announcements = define_relational_test_data()

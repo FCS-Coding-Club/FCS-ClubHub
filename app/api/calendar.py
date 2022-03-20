@@ -31,9 +31,11 @@ def gen_calendar_json(club, month, year):
             # List of meetings on that day
             if not events:
                 cal_dictionary[f"{current_row}{weekday}"]["names"] = []
+                cal_dictionary[f"{current_row}{weekday}"]["descriptions"] = []
                 cal_dictionary[f"{current_row}{weekday}"]["uids"] = []
             else:
                 cal_dictionary[f"{current_row}{weekday}"]["names"] = [e.summary for e in events]
+                cal_dictionary[f"{current_row}{weekday}"]["descriptions"] = [e.description for e in events]
                 # Used for frontend API calls to "/api/calendar/meeting"
                 cal_dictionary[f"{current_row}{weekday}"]["uids"] = [e.uid for e in events]
         if weekday == 6:
