@@ -12,5 +12,4 @@ def homepage():
 
 @mod.app_errorhandler(404)
 def page_not_found(e):
-    if e == 404:
-        return render_template('404.html'), e
+    return render_template('404.html')

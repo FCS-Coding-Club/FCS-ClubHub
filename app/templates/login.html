@@ -28,7 +28,7 @@
         </div>
     {% endif %}
     <div class=" w-100 h-100 row align-items-center justify-content-center">
-        <form action="/login" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+        <form action="/login?next={{ next }}" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group my-2">
                 <label for="email">Email</label>
