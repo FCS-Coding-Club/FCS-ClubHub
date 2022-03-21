@@ -112,9 +112,8 @@ def register():
         # This person did not successfully enter the form
         return render_template('register.html', form=form)
 
-    # Login Unauthorized Handler
 
-
+# Login Unauthorized Handler
 @login_manager.unauthorized_handler
 def handle_needs_login():
     flash("You have to be logged in to access this page.")
@@ -124,7 +123,8 @@ def handle_needs_login():
 # Redirect Destination
 def redirect_dest(fallback):
     dest = request.args.get('next')
-    if dest:
+    # This probably isn't good
+    if dest != "None":
         return redirect(dest)
     return redirect(fallback)
 
