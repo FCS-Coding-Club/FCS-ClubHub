@@ -1,8 +1,0 @@
-version: 0.2
-
-env:
-  variables:
-    git_url: "git@github.com:FCS-Coding-Club/FCSClubHub.git"
-  parameter-store:
-    ssh_key: id_rsa
-    ssh_pub: id_rsa.pub
