@@ -1,5 +1,7 @@
 import json
 import os
+import random
+import string
 from flask import Flask
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
@@ -15,6 +17,9 @@ isTesting = os.environ.get("TESTING")
 def create_app():
     # Compile Sass
     compile_sass()
+    # Set Production vars
+    if not isDebug:
+        setProdEnvironmentVars()
     # Init App
     app = Flask(__name__)
     # Configuration
@@ -62,6 +67,22 @@ def compile_sass():
     with open('app/static/css/bootstrap_min.css', 'w') as css:
         css.write(compiled)
 
+
+# Set Production Environment Variables
+def setProdEnvironmentVars():
+    os.environ["SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+    os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+    # Set mysql uri for sqlalchemy
+    if 'RDS_HOSTNAME' in os.environ:
+        os.environ["SQLALCHEMY_DATABASE_URI"] = f"mysql:///\
+            ?User={os.environ['RDS_USERNAME']}&;\
+            Password={os.environ['RDS_PASSWORD']}&\
+            Database={os.environ['RDS_DB_NAME']}&\
+            Server={os.environ['RDS_HOSTNAME']}&\
+            Port={os.environ['RDS_PORT']}"
+    else:
+        # Otherwise, fallback to sqlite
+        os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubhub.db"
 
 # Blueprint Registration Function
 def register_blueprints(app):
