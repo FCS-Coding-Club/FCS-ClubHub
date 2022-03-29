@@ -75,7 +75,7 @@ def setProdEnvironmentVars():
     os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
     # Set mysql uri for sqlalchemy
     if 'RDS_HOSTNAME' in os.environ:
-        os.environ["SQLALCHEMY_DATABASE_URI"] = f"mysql:///\
+        os.environ["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql:///\
             ?User={os.environ['RDS_USERNAME']}&;\
             Password={os.environ['RDS_PASSWORD']}&\
             Database={os.environ['RDS_DB_NAME']}&\
