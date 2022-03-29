@@ -169,7 +169,6 @@ class Member(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False, primary_key=True)
     club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable=False, primary_key=True)
     isLeader = db.Column(db.Boolean, nullable=False)
-    user = db.relationship("User")
 
     def __init__(self, user_id, club_id, isLeader):
         self.user_id = user_id
