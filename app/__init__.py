@@ -56,7 +56,8 @@ def app_config(app):
     app.config.update(dict(
         SECRET_KEY=os.environ.get("SECRET_KEY"),
         WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
-        SQLALCHEMY_DATABASE_URI='sqlite:///../clubhub.db',
+        SQLALCHEMY_DATABASE_URI=os.environ["SQLALCHEMY_DATABASE_URI"] if 
+        os.environ["SQLALCHEMY_DATABASE_URI"] else 'sqlite:///../clubhub.db',
         SQLALCHEMY_TRACK_MODIFICATIONS=False))
 
 
