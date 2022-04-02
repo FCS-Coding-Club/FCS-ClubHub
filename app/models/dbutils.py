@@ -39,6 +39,30 @@ def load_user_memberships(user_id):
     return Member.query.filter_by(user_id=user_id)
 
 
+# Checks if user (user_id) is a member of club (club_id)
+def is_member(club_id, user_id):
+    return bool(Member.query.get(Member.club_id == club_id,
+                                 Member.user_id == user_id))
+
+
+# Checks if user (user_id) is a leader of club (club_id)
+def is_leader(club_id, user_id):
+    return bool(Member.query.filter(Member.club_id == club_id,
+                                    Member.user_id == user_id,
+                                    Member.isLeader))
+
+
+# Checks if user (user_id) is a site admin
+def is_admin(user_id):
+    user = Member.query.get(user_id)
+    if user is None:
+        return None
+    acct = Account.query.get(id=user.account_id)
+    if acct is None:
+        return None
+    return acct.admin
+
+
 """Loads the clubs a user is in, and returns a list of dictionaries:
 The "club" key holds the club object as defined in the SQLAlchemy Schema.
 The "isLeader" key holds a boolean of whether the member is a leader or not.

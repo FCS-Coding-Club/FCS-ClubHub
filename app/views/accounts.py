@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, request, flash
 from flask.helpers import url_for
 from flask_login import current_user, LoginManager, login_user, logout_user
 from flask_wtf import FlaskForm
+import os
 from wtforms import StringField
 from wtforms.fields.simple import BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
@@ -56,7 +57,11 @@ class CheckPassword:
         user = models.User.query.filter_by(email=form.data['email'].lower()).first()
         if user is None:
             return
-        valid = bcrypt.hashpw(field.data.encode(), user.password) == user.password
+        # MySQL and SQLite have different datatypes for the password
+        if "MYSQL_URL" in os.environ:
+            valid = bcrypt.hashpw(field.data.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8')
+        else:
+            valid = bcrypt.hashpw(field.data.encode('utf-8'), user.password) == user.password
         if not valid:
             raise ValidationError(f'Incorrect password')
 

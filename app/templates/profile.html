@@ -10,9 +10,9 @@
 <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/profile.css') }}>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 col-sm-12">
+        <div class="col-lg-4 col-sm-12 text-center">
             {{big_profile(profile_user)}}
-            <div style="text-align: center;">
+            <div class="display-5 mt-2">
                 {{profile_user.fname + " " + profile_user.lname}}
             </div>
         </div>
@@ -21,7 +21,7 @@
             <hr>
             {% for user_club in user_clubs %}
             {% if not user_club['isLeader'] %}
-            <a href="/club/{{user_club.get('club').club_id}}" class="text-decoration-none">{{user_club['club'].name}}</a>
+            <a href="/club/{{user_club.get('club').club_id}}" class="text-decoration-none display-6">{{user_club['club'].name}}</a>
             {% endif %}
             {% endfor %}
         </div>
@@ -30,7 +30,7 @@
             <hr>
             {% for user_club in user_clubs %}
             {% if user_club['isLeader'] %}
-            <a href="/club/{{user_club['club'].id}}" class="text-decoration-none">{{user_club['club'].name}}</a>
+            <a href="/club/{{user_club['club'].id}}" class="text-decoration-none display-6">{{user_club['club'].name}}</a>
             {% endif %}
             {% endfor %}
         </div>

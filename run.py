@@ -11,10 +11,9 @@ if os.environ.get('DEBUG') is None:
 if os.environ.get('TESTING') is None:
     os.environ["TESTING"] = "False"
 
-if os.environ.get('TESTING') == "False" and os.environ["DEBUG"] == "True":
+if os.environ.get('TESTING') == "False":
     os.environ["SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
     os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
-    os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubhub.db"
     app = create_app()
     app.run(host="0.0.0.0", port=3000, debug=os.environ["DEBUG"])
 else:

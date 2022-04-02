@@ -6,6 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
 import sass
+from sqlalchemy import create_engine
 from .models import dbutils, models, mock_db
 from .views import accounts
 from .utils import render_functions
@@ -18,7 +19,7 @@ def create_app():
     # Compile Sass
     compile_sass()
     # Set Production vars
-    if not isDebug:
+    if isDebug != "True":
         setProdEnvironmentVars()
     # Init App
     app = Flask(__name__)
@@ -34,6 +35,9 @@ def create_app():
     # Login Manager
     accounts.login_manager.init_app(app)
     # DB Init
+    if "MYSQL_URL" in os.environ:
+        e = create_engine(os.environ['MYSQL_URL'])
+        e.execute(f"CREATE DATABASE IF NOT EXISTS {os.environ['RDS_DB_NAME']}")
     models.db.init_app(app)
     # Add Render Functions to Jinja Globals
     app.jinja_env.globals.update(render_functions)
@@ -44,7 +48,7 @@ def create_app():
         models.db.session.commit()
         init_account_json()
         # Adds dummy data for dev purposes
-        if isDebug or isTesting:
+        if isDebug == "True" or isTesting == "True":
             mock_db.fill_with_test_data(models.db, app.app_context())
     return app
 
@@ -56,8 +60,7 @@ def app_config(app):
     app.config.update(dict(
         SECRET_KEY=os.environ.get("SECRET_KEY"),
         WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
-        SQLALCHEMY_DATABASE_URI=os.environ["SQLALCHEMY_DATABASE_URI"] if 
-        os.environ["SQLALCHEMY_DATABASE_URI"] else 'sqlite:///../clubhub.db',
+        SQLALCHEMY_DATABASE_URI=os.environ["SQLALCHEMY_DATABASE_URI"],
         SQLALCHEMY_TRACK_MODIFICATIONS=False))
 
 
@@ -75,12 +78,8 @@ def setProdEnvironmentVars():
     os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
     # Set mysql uri for sqlalchemy
     if 'RDS_HOSTNAME' in os.environ:
-        os.environ["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql:///\
-            ?User={os.environ['RDS_USERNAME']}&;\
-            Password={os.environ['RDS_PASSWORD']}&\
-            Database={os.environ['RDS_DB_NAME']}&\
-            Server={os.environ['RDS_HOSTNAME']}&\
-            Port={os.environ['RDS_PORT']}"
+        os.environ["MYSQL_URL"] = f"mysql+pymysql://{os.environ['RDS_USERNAME']}:{os.environ['RDS_PASSWORD']}@{os.environ['RDS_HOSTNAME']}:{os.environ['RDS_PORT']}"
+        os.environ["SQLALCHEMY_DATABASE_URI"] = os.environ["MYSQL_URL"] + f"/{os.environ['RDS_DB_NAME']}"
     else:
         # Otherwise, fallback to sqlite
         os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubhub.db"

@@ -61,10 +61,14 @@ def register_club():
 @login_required
 def club(clubid):
     current_club = dbutils.load_club(clubid)
+    # Check if club exists
     if current_club is not None:
         members = dbutils.load_club_members(clubid)
+        # Add Administrative buttons if leader
+        isLeader = dbutils.is_leader(clubid, current_user.id) 
         return render_template('club.html',
                                current_club=current_club,
                                current_user=current_user,
-                               members=members)
+                               members=members,
+                               isClubLeader=isLeader)
     abort(404)
