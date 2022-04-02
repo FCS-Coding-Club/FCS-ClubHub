@@ -80,9 +80,10 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="col-lg-4 col-md-6 col-sm-12 text-center">
             <h2 class="text-center my-3">Announcements</h2>
             <hr>
+            <b>Work In Progress...</b>
         </div>
     </div>
 </div>
@@ -154,24 +155,34 @@
                     entry.innerText = day !== undefined ? day : ""
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
-                    entry.disabled = !isMeeting
-                    if (isMeeting) {
-                        entry.classList.add("bg-success")
-                        // Change Modal Title
-                        let meetingNum = meetingNames.length
-                        let title = `${meetingNum} ${meetingNum > 1 ? "meetings" : "meeting"} on ${month_name} ${day}, ${current_year}`
-                        let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
-                        modalLabel.innerText = title
-                        //Change Modal Content
-                        let modalContent = document.getElementById(`ModalContent${row}${col}`)
-                        modalContent.innerHTML = ""
-                        for (let e = 0; e < meetingNum; e++) {
-                            let meetingHeader = document.createElement("b")
-                            meetingHeader.innerText = meetingNames[e]
-                            modalContent.appendChild(meetingHeader)
-                            let meetingDescription = document.createElement("p")
-                            meetingDescription.innerText = meetingDescriptions[e]
-                            modalContent.appendChild(meetingDescription)
+                    entry.disabled = !day
+                    if (day) {
+                        if (isMeeting) {
+                            entry.classList.add("bg-success")
+                            // Change Modal Title
+                            let meetingNum = meetingNames.length
+                            // Ex. "1 meeting on January 1, 1970"
+                            let title = `${meetingNum} \
+                            ${meetingNum > 1 ? "meetings" : "meeting"} \
+                            on ${month_name} ${day}, ${current_year}`
+                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                            modalLabel.innerText = title
+                            //Change Modal Content
+                            let modalContent = document.getElementById(`ModalContent${row}${col}`)
+                            modalContent.innerHTML = ""
+                            for (let e = 0; e < meetingNum; e++) {
+                                let meetingHeader = document.createElement("b")
+                                meetingHeader.innerText = meetingNames[e]
+                                modalContent.appendChild(meetingHeader)
+                                let meetingDescription = document.createElement("p")
+                                meetingDescription.innerText = meetingDescriptions[e]
+                                modalContent.appendChild(meetingDescription)
+                            }
+                        } else {
+                            let title = `No meetings on \
+                            ${month_name} ${day}, ${current_year}`
+                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                            modalLabel.innerText = title
                         }
                     }
                 }

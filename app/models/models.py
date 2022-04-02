@@ -32,7 +32,7 @@ event_keys = date_keys + (
 class Club(db.Model):
     __tablename__ = 'clubs'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=False, unique=True)
+    name = db.Column(db.String(30), nullable=False, unique=True)
     desc = db.Column(db.Text, nullable=True)
     # This will be stored in iCal format
     calendar = db.Column(db.Text, nullable=False)
@@ -127,10 +127,10 @@ class Club(db.Model):
 # Account Model (Whitelisted but Unclaimed)
 class Account(db.Model):
     __tablename__ = 'accounts'
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
     grade = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.Text, nullable=False, unique=True)
+    email = db.Column(db.String(320), nullable=False, unique=True)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, name, grade, email, admin=False):
@@ -144,11 +144,10 @@ class Account(db.Model):
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    account_id = db.Column(db.Integer, db.ForeignKey(Account.id), nullable=False)
+    account_id = db.Column(db.Integer, db.ForeignKey(Account.id), nullable=False, unique=True)
     fname = db.Column(db.Text, nullable=False)
     lname = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, db.ForeignKey(Account.email), nullable=False)
-    admin = db.Column(db.Boolean, db.ForeignKey(Account.admin), nullable=False)
+    email = db.Column(db.String(320), db.ForeignKey(Account.email), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
 
     def __init__(self, account_id, fname, lname, email, password, admin=False):
