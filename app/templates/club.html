@@ -61,7 +61,8 @@
                         data-bs-target="#Modal{{row}}{{col}}">
                         </button>
                     </div>
-                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
+                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" 
+                    aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content bg-light">
                             <div class="modal-header border-secondary">
@@ -70,6 +71,9 @@
                             <div class="modal-body" id="ModalContent{{row}}{{col}}">
                             </div>
                             <div class="modal-footer border-secondary">
+                                {% if isClubLeader %}
+                                <a href="/add_meeting?club={{current_club.id}}">Add Meeting</a>
+                                {% endif %}
                               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             </div>
                           </div>

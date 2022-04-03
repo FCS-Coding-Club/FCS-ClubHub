@@ -49,10 +49,11 @@ def is_member(club_id, user_id):
 def is_leader(club_id, user_id):
     return bool(Member.query.filter(Member.club_id == club_id,
                                     Member.user_id == user_id,
-                                    Member.isLeader))
+                                    Member.isLeader).first())
 
 
 # Checks if user (user_id) is a site admin
+# Returns None if user / account DNI
 def is_admin(user_id):
     user = Member.query.get(user_id)
     if user is None:
