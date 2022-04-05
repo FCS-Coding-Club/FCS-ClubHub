@@ -49,7 +49,7 @@ class Club(db.Model):
 
     # Add event to calendar
     def add_event(self, start_date: datetime, end_date: datetime,
-                  summary: str, desc: str = "", recurrence_rule: rrule = None):
+                  summary: str, desc: str = "", recurrence_rule = None):
         # Create Event and fill in data
         e = Event()
         e.add('dtstart', start_date)
@@ -177,6 +177,11 @@ class Member(db.Model):
     def __repr__(self):
         return f'<Club {"Leader" if self.isLeader else "Member"}, id {self.user_id}, club_id {self.club_id}>'
 
+    def club(self):
+        return Club.query.get(self.club_id)
+
+    def user(self):
+        return User.query.get(self.user_id)
 
 # Club Announcement Model
 class Announcement(db.Model):

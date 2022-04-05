@@ -1,0 +1,89 @@
+<!--The registration page of Clubhub, child of base.html-->
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock head %}
+{% block title %}Club Hub - Register{% endblock title %}
+{% block content %}
+    {% if form.errors %}
+    <div class="alert alert-danger">
+    Invalid Form, Please Try Again
+    </div>
+    {% endif %}
+    <div class="w-100 h-100 row align-items-center justify-content-center">
+        <form action="/add_meeting?club={{clubid}}&day={{day}}" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+            {{ form.hidden_tag() }}
+                <div class="form-group my-2">
+                    <label for="name">Meeting Name</label>
+                    {% for error in form.name.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.name(size=30, class="form-control bg-light border-dark", placeholder="Clove Hitch Practice")}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="desc">Description (optional)</label>
+                    {% for error in form.desc.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.desc(size=280, class="form-control bg-light border-dark", style="height: 100px",
+                    placeholder="You will \"knot\" forget how to tie a clove hitch after this meeting")}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="start_time">Start Time</label>
+                    {% for error in form.start_time.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.start_time(class="form-control bg-light border-dark")}}
+                    <label for="end_time">End Time</label>
+                    {% for error in form.end_time.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.end_time(class="form-control bg-light border-dark")}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="desc">Repeat Event?</label>
+                    {% for error in form.repeat.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.repeat(id="aef-repeat", class="bg-light", onClick="updateRRuleVisibility()")}}
+                </div>
+                <span id="repeat-form-group">
+                    <label for="indefrepeat">Repeat Indefinitely?</label>
+                    {{form.indefrepeat(id="aef-indefrepeat", class="bg-light", onClick="updateUntilVisibility()")}}
+                    <div class="form-group my-2">
+                        <label for="every">Repeat Every</label>
+                        {% for error in form.every.errors %}
+                            | <span class="alert-danger">{{ error }}</span>
+                        {% endfor %}
+                        {{form.every(class="bg-light", min="1", value="1")}}
+                        {{form.freq(class="bg-light")}}
+                        <span id="until-form-input">
+                            <label for="until">until</label>
+                            {% for error in form.until.errors %}
+                                | <span class="alert-danger">{{ error }}</span>
+                            {% endfor %}
+                            {{form.until(class="bg-light",
+                            min=day_yyyy_mm_dd,
+                            value=day_yyyy_mm_dd)}} 
+                        </span>
+                    </div>   
+                </span>
+                
+            <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Add Event" />
+        </form>
+        <script type="text/javascript">
+            const rfg = document.getElementById("repeat-form-group")
+            const rcb = document.getElementById("aef-repeat")
+            const ucb = document.getElementById("aef-indefrepeat")
+            const ufi = document.getElementById("until-form-input")
+            updateRRuleVisibility()
+            updateUntilVisibility()
+            function updateRRuleVisibility() {
+                rfg.style.display = rcb.checked ? "" : "none"
+            }
+            function updateUntilVisibility() {
+                ufi.style.display = !ucb.checked ? "" : "none"
+            }
+        </script>  
+    </div>
+{% endblock content %}
