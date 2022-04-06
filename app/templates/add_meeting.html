@@ -55,14 +55,17 @@
                         {% for error in form.every.errors %}
                             | <span class="alert-danger">{{ error }}</span>
                         {% endfor %}
-                        {{form.every(class="bg-light", min="1", value="1")}}
-                        {{form.freq(class="bg-light")}}
+                        {{form.every(class="bg-light border-top-0
+                        border-start-0 border-end-0", min="1", value="1")}}
+                        {{form.freq(class="bg-light py-1 mx-1 border-top-0
+                        border-start-0 border-end-0")}}
                         <span id="until-form-input">
                             <label for="until">until</label>
                             {% for error in form.until.errors %}
                                 | <span class="alert-danger">{{ error }}</span>
                             {% endfor %}
-                            {{form.until(class="bg-light",
+                            {{form.until(class="bg-light border-top-0
+                            border-start-0 border-end-0",
                             min=day_yyyy_mm_dd,
                             value=day_yyyy_mm_dd)}} 
                         </span>

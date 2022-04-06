@@ -72,7 +72,8 @@
                             </div>
                             <div class="modal-footer border-secondary">
                                 {% if isClubLeader %}
-                                <a id="modal-aml{{row}}{{col}}" href="/add_meeting?club={{current_club.id}}">Add Meeting</a>
+                                <a id="modal-aml{{row}}{{col}}" class="btn btn-light"
+                                href="/add_meeting?club={{current_club.id}}">Add Meeting</a>
                                 {% endif %}
                               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             </div>
