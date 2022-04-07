@@ -61,7 +61,11 @@ def fill_with_test_data(database, ctx):
         test_announcements = define_relational_test_data()
 
         register_admin_user()
-
+        admin_id = User.query.filter_by(email="admin@" + accounts.fcs_suffix).first().id
+        for club in test_clubs:
+            database.session.add(Member(user_id=admin_id, club_id=club.id, isLeader=True))
+            database.session.commit()
+        
         for announcement in test_announcements:
             db.session.add(announcement)
             db.session.commit()

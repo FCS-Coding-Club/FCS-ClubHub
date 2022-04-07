@@ -11,25 +11,36 @@
             <hr>
             <p class="text-break">{{current_club.desc}}</p>
             <h3>Leaders</h3>
-            <div class=".row-cols-3">
-            {% for member in members%}
-                {% if member.isLeader%}
-                <div class="col">{{profile(member.user())}}</div>
-                {% endif %}
+            <div class="row row-cols-3">
+            {% for leader in leaders%}
+                <div class="col">{{profile(leader.user())}}</div>
                 {% else %}
-                <p>No Leaders... is this Anarchy Club?</p>
+                <p class="text-break">No Leaders... is this Anarchy Club?</p>
             {% endfor %}
             </div>
             <h3>Members</h3>
-            <div class=".row-cols-3">
+            <div class="row row-cols-3">
             {% for member in members%}
                 {% if not member.isLeader%}
                 <div class="col">{{profile(member.user())}}</div>
                 {% endif %}
                 {% else %}
+                {% if isClubLeader %}
                 <p>No Members...I'm sure people will join soon :)</p>
+                {% else %}
+                <p>No Members...you can always join :)</p>
+                {% endif %}     
             {% endfor %}
             </div>
+            <div class="mt-3">
+                {% if not isClubMember %}
+                <a class="btn btn-light"
+                href="/join_club?club={{current_club.id}}">Join Club</a>
+                {% else %}
+                <a class="btn btn-light"
+                href="/leave_club?club={{current_club.id}}">Leave Club</a>
+                {% endif %}
+            </div> 
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 align-content-center">
             <h2 class="text-center my-3">Meetings</h2>
@@ -174,6 +185,7 @@
                     let meetingNames = json_val['names']
                     let meetingDescriptions = json_val['descriptions']
                     let meetingTimes = json_val['times']
+                    let uids = json_val['uids']
                     /* If the key is undefined for whatever reason, this
                     will just leave the calendar box blank instead of
                     actually writing the word "undefined" */
@@ -207,6 +219,14 @@
                                 let meetingDescription = document.createElement("p")
                                 meetingDescription.innerText = meetingDescriptions[e]
                                 modalContent.appendChild(meetingDescription)
+                                if (isLeader) {
+                                    let deleteMeetingButton = document.createElement("a")
+                                    deleteMeetingButton.innerText = "❌"
+                                    deleteMeetingButton.className = "btn btn-light"
+                                    deleteMeetingButton.href = 
+                                    `/delete_meeting?club={{current_club.id}}&uid=${uids[e]}`
+                                    modalContent.appendChild(deleteMeetingButton)
+                                }
                             }
                         } else {
                             let title = `No meetings on \

@@ -96,14 +96,53 @@ def club(clubid):
     # Check if club exists
     if current_club is not None:
         members = dbutils.load_club_members(clubid)
+        leaders = list(filter(lambda m: m.isLeader, members))
+        # For join / leave buttons
+        isMember = dbutils.is_member(clubid, current_user.id)
         # Add Administrative buttons if leader
         isLeader = dbutils.is_leader(clubid, current_user.id) 
         return render_template('club.html',
                                current_club=current_club,
                                current_user=current_user,
                                members=members,
+                               leaders=leaders,
+                               isClubMember=isMember,
                                isClubLeader=isLeader)
     abort(404)
+
+# Join Club Function
+@mod.route("/join_club", methods=["GET"])
+@login_required
+def join_club():
+    clubid = request.args.get('club')
+    if clubid is None:
+        abort(404)
+    club = dbutils.load_club(clubid)
+    if club is None:
+        abort(400)
+    member = dbutils.is_member(clubid, current_user.id)
+    if member:
+        abort(403)
+    models.db.session.add(models.Member(current_user.id, clubid, False))
+    models.db.session.commit()
+    return redirect(url_for('community.club', clubid=clubid))
+
+# Leave Club Function
+@mod.route("/leave_club", methods=["GET"])
+@login_required
+def leave_club():
+    clubid = request.args.get('club')
+    if clubid is None:
+        abort(404)
+    club = dbutils.load_club(clubid)
+    if club is None:
+        abort(400)
+    member: models.Member = dbutils.load_member(clubid, current_user.id)
+    if not bool(member):
+        abort(403)
+    models.db.session.delete(member)
+    models.db.session.commit()
+    return redirect(url_for('community.club', clubid=clubid))
 
 def validmmddyyyy(day: str):
     if len(day) != 8:
@@ -181,4 +220,21 @@ def add_meeting():
         return render_template('add_meeting.html', clubid=clubid,
         day=day, day_yyyy_mm_dd=day_yyyy_mm_dd, form=form)
     abort(404)
-    
+
+# Delete Club Meeting
+@mod.route("/delete_meeting", methods=["GET"])
+@login_required
+def delete_meeting():
+    clubid = request.args.get('club')
+    uid = request.args.get('uid')
+    if clubid is None or uid is None:
+        abort(404)
+    if not dbutils.is_leader(clubid, current_user.id):
+        abort(403)
+    club: models.Club = dbutils.load_club(clubid)
+    if club is None:
+        abort(400)
+    if dbutils.event_exists(club, uid):
+        club.remove_event(uid)
+        return redirect(url_for('community.club', clubid=clubid))
+    abort(400)

@@ -13,10 +13,10 @@ def homepage():
 
 # Non-2xx Status Handling
 @mod.app_errorhandler(HTTPException)
-def page_not_found(e):
+def page_not_found(e: HTTPException):
     # Custom Error Pages
     if e.code in [400, 403, 404]:
-        return render_template(f'error/{e.code}.html')
+        return render_template(f'error/4xx.html', e = e)
     # Fallback Default JSON Error
     r = e.get_response()
     # replace the body with JSON

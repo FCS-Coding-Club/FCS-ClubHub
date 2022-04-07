@@ -40,7 +40,6 @@ def gen_calendar_json(club, month, year):
             cal_dictionary[f"{current_row}{weekday}"]["descriptions"] = [e.description for e in events]
             # dtstart and dtend in format: 10:30 - 11:30 for modal presentation
             formatted_times = [f"{e.start.strftime('%H:%M')} - {e.end.strftime('%H:%M')}" for e in events]
-            print(formatted_times)
             cal_dictionary[f"{current_row}{weekday}"]["times"] = formatted_times
             # Used for frontend API calls to "/api/calendar/meeting"
             cal_dictionary[f"{current_row}{weekday}"]["uids"] = [e.uid for e in events]

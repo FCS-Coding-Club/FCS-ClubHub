@@ -21,7 +21,19 @@
             <hr>
             {% for user_club in user_clubs %}
             {% if not user_club['isLeader'] %}
-            <a href="/club/{{user_club.get('club').club_id}}" class="text-decoration-none display-6">{{user_club['club'].name}}</a>
+            <div class="row mt-2">
+                <a href="/club/{{user_club['club'].id}}" 
+                class="text-decoration-none display-6">{{user_club['club'].name}}</a>
+            </div>
+            {% endif %}
+            {% else %}
+            {% if profile_user == current_user %}
+            <div class="row text-center">
+            <p>You're currently not a member of any clubs...</p>
+            <p class="mb-0">Why not
+            <a class="text-decoration-none" href="/club/1">join our club?</a>
+            </p> 
+            </div>
             {% endif %}
             {% endfor %}
         </div>
@@ -30,7 +42,18 @@
             <hr>
             {% for user_club in user_clubs %}
             {% if user_club['isLeader'] %}
-            <a href="/club/{{user_club['club'].id}}" class="text-decoration-none display-6">{{user_club['club'].name}}</a>
+            <div class="row mt-2">
+                <a href="/club/{{user_club['club'].id}}" class="text-decoration-none display-6">{{user_club['club'].name}}</a>
+            </div>
+            {% endif %}
+            {% else %}
+            {% if profile_user == current_user %}
+            <div class="row text-center">
+            <p>You're currently not leading any clubs...</p>
+            <p class="mb-0">Why not
+            <a class="text-decoration-none" href="/register_club">create your own club?</a>
+            </p> 
+            </div>
             {% endif %}
             {% endfor %}
         </div>
