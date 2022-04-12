@@ -40,8 +40,8 @@ def fill_with_test_data(database, ctx):
                     'until': datetime(2022, 3, 11, 0, 0, 0).astimezone(timezone.utc)
                 }
             )
-            event = club.get_events_by_summary("Test Event")[0]
-            club.edit_event(event['uid'], {
+            event1 = club.get_events_by_summary("Test Event")[0]
+            club.edit_event(event1['uid'], {
                 'dtstart': datetime(2022, 2, 25, 10, 30, 0).astimezone(timezone.utc),
                 'dtend': datetime(2022, 2, 25, 11, 30, 0).astimezone(timezone.utc)
             })
@@ -55,7 +55,9 @@ def fill_with_test_data(database, ctx):
                     'interval': 1,
                     'until': datetime(2022, 3, 22, 0, 0, 0).astimezone(timezone.utc)
                 }
-            )
+            )          
+            # event2 = club.get_events_by_summary("Test Event 2")[0]
+            # club.remove_event(event2['uid'])
             database.session.commit()
 
         test_announcements = define_relational_test_data()

@@ -236,5 +236,6 @@ def delete_meeting():
         abort(400)
     if dbutils.event_exists(club, uid):
         club.remove_event(uid)
+        models.db.session.commit()
         return redirect(url_for('community.club', clubid=clubid))
     abort(400)
