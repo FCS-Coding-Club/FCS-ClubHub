@@ -21,7 +21,8 @@
 {% endmacro %}
 <body class="w-100 h-100 overflow-hidden">
     <div class="d-flex flex-column min-vh-100 vh-100">
-        <nav class="navbar navbar-expand-sm navbar-light bg-light w-100 justify-content-center d-lg-flex">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light w-100 justify-content-center d-lg-flex"
+        style="z-index: 1000;">
             <a class="navbar-brand m-2" href="/">FCS Club Hub</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarExample" 
             aria-controls="navbarExample" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +54,9 @@
                 </ul>
             </div>
         </nav>
-        <main role="main" class="flex-grow-1 bg-light bg-gradient overflow-auto">{% block content %}{% endblock %}</main>
-        <footer class="w-100 mb-0 pt-2 flex-shrink-0 bg-light shadow-lg ">
+        <main role="main" class="flex-grow-1 bg-light bg-gradient">{% block content %}{% endblock %}</main>
+        <footer class="w-100 mb-0 pt-2 flex-shrink-0 bg-light shadow-lg"
+        style="z-index: 1000;">
             <div class="footer-copyright text-center py-3 text-dark">© 2021 Copyright:
                 <a href="https://github.com/FCS-Coding-Club/"> Friends' Central Coding Club</a>
             </div>

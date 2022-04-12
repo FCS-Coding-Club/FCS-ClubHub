@@ -4,52 +4,60 @@
     {{ super() }}
 {% endblock head %}
 {% block title %}Club Hub - Register{% endblock title %}
+
 {% block content %}
     {% if form.errors %}
     <div class="alert alert-danger">
     Invalid Form, Please Try Again
     </div>
     {% endif %}
-    <div class="w-100 h-100 row align-items-center justify-content-center">
-        <form action="/register?next={{ next }}" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+    <div class="bg-lavinia"></div>
+    <div class="position-absolute text-center" style="top: 85%; left: 0; right: 0; margin: auto;">
+        <a class="bg-dark p-1 my-1 text-decoration-none text-white">Art by Lavinia Wang</a>
+    </div>
+    <div class="w-100 h-100 row align-items-center justify-content-center form-with-bg">
+        <form action="/register?next={{ next }}" 
+        class="col-lg-6 py-2 px-3 bg-opacity-50 bg-light shadow-lg rounded-1" method="POST">
             {{ form.hidden_tag() }}
             <div class="row">
                 <div class="form-group col-md-6 my-2">
-                    <label for="fname">First Name</label>
+                    <label for="fname" class="mb-1">First Name</label>
                     {% for error in form.fname.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.fname(size=30, class="form-control bg-light border-dark", placeholder="John")}}
+                    {{form.fname(size=30, class="form-control border-dark", placeholder="John")}}
                 </div>
                 <div class="form-group col-md-6 my-2">
-                    <label for="lname">Last Name</label>
+                    <label for="lname" class="mb-1">Last Name</label>
                     {% for error in form.lname.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.lname(size=30, class="form-control bg-light border-dark", placeholder="Smith")}}
+                    {{form.lname(size=30, class="form-control border-dark", placeholder="Smith")}}
                 </div>
             </div>
             <div class="form-group my-2">
-                <label for="email">Email</label>
+                <label for="email" class="mb-1">Email</label>
                 {% for error in form.email.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                {{form.email(size=30, class="form-control bg-light border-dark", placeholder="@friendscentral.org")}}
+                {{form.email(size=30, class="form-control border-dark", placeholder="@friendscentral.org")}}
             </div>
             <div class="row">
                 <div class="form-group col-md-6 my-2">
-                    <label for="password">Password</label>
+                    <label for="password" class="mb-1">Password</label>
                     {% for error in form.password.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.password(size=30, class="form-control bg-light border-dark", **{'type': 'password'})}}
+                    {{form.password(size=30, autocomplete="new-password", 
+                    class="form-control border-dark", **{'type': 'password'})}}
                 </div>
                 <div class="form-group col-md-6 my-2">
-                    <label for="confirm-password">Confirm Password</label>
+                    <label for="confirm-password" class="mb-1">Confirm Password</label>
                     {% for error in form.password_confirm.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.password_confirm(size=30, class="form-control bg-light border-dark", **{'type': 'password'})}}
+                    {{form.password_confirm(size=30, autocomplete="new-password", 
+                    class="form-control border-dark", **{'type': 'password'})}}
                 </div>
             </div>
             <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Register" />

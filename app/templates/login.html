@@ -27,31 +27,35 @@
             Invalid Form, Please Try Again
         </div>
     {% endif %}
-    <div class=" w-100 h-100 row align-items-center justify-content-center">
-        <form action="/login?next={{ next }}" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+    <div class="bg-lavinia"></div>
+    <div class="position-absolute text-center" style="top: 85%; left: 0; right: 0; margin: auto;">
+        <a class="bg-dark p-1 my-1 text-decoration-none text-white">Art by Lavinia Wang</a>
+    </div>
+    <div class="w-100 h-100 row align-items-center justify-content-center form-with-bg">
+        <form action="/login?next={{ next }}" class="col-lg-6 py-2 px-3 bg-opacity-50 bg-light shadow-lg rounded-1" method="POST">
             {{ form.hidden_tag() }}
+            <label for="email">Email</label>
             <div class="form-group my-2">
-                <label for="email">Email</label>
                 {% for error in form.email.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                {{form.email(size=30, class="form-control bg-light border-dark")}}
+                {{form.email(size=30, class="form-control border-dark")}}
             </div>
-            <div class="form-group my-2 row mx-0">
-                <label for="password" class="p-0">Password</label>
+            <label for="password" class="p-0">Password</label>
+            <div class="form-group my-2 row mx-0">  
                 {% for error in form.password.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
                 <div class="col-10 p-0">
-                    {{form.password(size=30, id="password-form", class="form-control bg-light border-dark", **{'type': 'password'})}}
+                    {{form.password(size=30, id="password-form", class="form-control border-dark", **{'type': 'password'})}}
                 </div>
-                <div class="col-2 border border-dark rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
+                <div class="col-2 border border-dark bg-white rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
                     <p class="my-auto mx-auto" id="show">Show</p>
                     <p class="d-none my-auto mx-auto" id="hide">Hide</p>
                 </div>
             </div>
-            <div class="form-group my-2"> 
-                {{form.remember_me(class="bg-light")}}
+            <div class="form-group my-2">
+                {{form.remember_me()}}
                 <label for="remember_me">Remember Me</label>
             </div>
             <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Log In" />
