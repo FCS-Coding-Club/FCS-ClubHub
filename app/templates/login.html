@@ -39,7 +39,7 @@
                 {% for error in form.email.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                {{form.email(size=30, class="form-control border-dark")}}
+                {{form.email(size=30, class="form-control border-dark bg-light bg-opacity-75")}}
             </div>
             <label for="password" class="p-0">Password</label>
             <div class="form-group my-2 row mx-0">  
@@ -47,9 +47,11 @@
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
                 <div class="col-10 p-0">
-                    {{form.password(size=30, id="password-form", class="form-control border-dark", **{'type': 'password'})}}
+                    {{form.password(size=30, id="password-form", 
+                    class="form-control border-dark bg-light bg-opacity-75", **{'type': 'password'})}}
                 </div>
-                <div class="col-2 border border-dark bg-white rounded-1 d-flex" style="cursor: pointer;" onclick="password_show_hide();">
+                <div class="col-2 border border-dark bg-light bg-opacity-75 rounded-1 d-flex" 
+                style="cursor: pointer;" onclick="password_show_hide();">
                     <p class="my-auto mx-auto" id="show">Show</p>
                     <p class="d-none my-auto mx-auto" id="hide">Hide</p>
                 </div>

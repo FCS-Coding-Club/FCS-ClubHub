@@ -25,14 +25,14 @@
                     {% for error in form.fname.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.fname(size=30, class="form-control border-dark", placeholder="John")}}
+                    {{form.fname(size=30, class="form-control border-dark bg-light bg-opacity-75", placeholder="John")}}
                 </div>
                 <div class="form-group col-md-6 my-2">
                     <label for="lname" class="mb-1">Last Name</label>
                     {% for error in form.lname.errors %}
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
-                    {{form.lname(size=30, class="form-control border-dark", placeholder="Smith")}}
+                    {{form.lname(size=30, class="form-control border-dark bg-light bg-opacity-75", placeholder="Smith")}}
                 </div>
             </div>
             <div class="form-group my-2">
@@ -40,7 +40,7 @@
                 {% for error in form.email.errors %}
                     | <span class="alert-danger">{{ error }}</span>
                 {% endfor %}
-                {{form.email(size=30, class="form-control border-dark", placeholder="@friendscentral.org")}}
+                {{form.email(size=30, class="form-control border-dark bg-light bg-opacity-75", placeholder="@friendscentral.org")}}
             </div>
             <div class="row">
                 <div class="form-group col-md-6 my-2">
@@ -49,7 +49,7 @@
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
                     {{form.password(size=30, autocomplete="new-password", 
-                    class="form-control border-dark", **{'type': 'password'})}}
+                    class="form-control border-dark bg-light bg-opacity-75", **{'type': 'password'})}}
                 </div>
                 <div class="form-group col-md-6 my-2">
                     <label for="confirm-password" class="mb-1">Confirm Password</label>
@@ -57,7 +57,7 @@
                         | <span class="alert-danger">{{ error }}</span>
                     {% endfor %}
                     {{form.password_confirm(size=30, autocomplete="new-password", 
-                    class="form-control border-dark", **{'type': 'password'})}}
+                    class="form-control border-dark bg-light bg-opacity-75", **{'type': 'password'})}}
                 </div>
             </div>
             <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Register" />
