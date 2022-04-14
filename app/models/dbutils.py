@@ -40,8 +40,8 @@ def load_user_memberships(user_id):
 
 
 def load_member(club_id, user_id):
-    m = Member.query.filter(club_id == club_id, 
-                            user_id == user_id)
+    m = Member.query.filter(Member.club_id == club_id, 
+                            Member.user_id == user_id)
     if m is None:
         return None
     return m.first()

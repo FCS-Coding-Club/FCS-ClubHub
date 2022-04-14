@@ -168,13 +168,66 @@ def leave_club():
     club = dbutils.load_club(clubid)
     if club is None:
         abort(400)
-    member: models.Member = dbutils.load_member(clubid, current_user.id)
+    member = dbutils.load_member(clubid, current_user.id)
     if not bool(member):
         abort(403)
     models.db.session.delete(member)
     models.db.session.commit()
     return redirect(url_for('community.club', clubid=clubid))
 
+# Make Leader Function
+@mod.route("/add_leader", methods=["GET"])
+@login_required
+def add_leader():
+    # Loading + Checks
+    clubid = request.args.get('club')
+    userid = request.args.get('user')
+    if clubid is None or userid is None:
+        abort(404)
+    club = dbutils.load_club(clubid)
+    user = dbutils.load_user(userid)
+    if club is None or user is None:
+        abort(400)
+    promotingMember = dbutils.load_member(club_id=clubid, user_id=current_user.id)
+    if not bool(promotingMember):
+        abort(403)
+    if not promotingMember.isLeader:
+        abort(403)
+    promotedMember = dbutils.load_member(club_id=clubid, user_id=userid)
+    if not bool(promotedMember):
+        abort(403)
+    # Actual Promoting to leader
+    promotedMember.isLeader = True
+    models.db.session.commit()
+    return redirect(url_for('community.club', clubid=clubid))
+
+# Remove Leader Function
+@mod.route("/remove_leader", methods=["GET"])
+@login_required
+def remove_leader():
+    # Loading + Checks
+    clubid = request.args.get('club')
+    userid = request.args.get('user')
+    if clubid is None or userid is None:
+        abort(404)
+    club = dbutils.load_club(clubid)
+    user = dbutils.load_user(userid)
+    if club is None or user is None:
+        abort(400)
+    demotingMember = dbutils.load_member(clubid, current_user.id)
+    if not bool(demotingMember):
+        abort(403)
+    if not demotingMember.isLeader:
+        abort(403)
+    demotedMember = dbutils.load_member(clubid, userid)
+    if not bool(demotedMember):
+        abort(403)
+    # Actual Demoting from Leader
+    demotedMember.isLeader = False
+    models.db.session.commit()
+    return redirect(url_for('community.club', clubid=clubid))
+
+# Checks if date string fits mmddyyyy format
 def validmmddyyyy(day: str):
     if len(day) != 8:
         return False
@@ -191,6 +244,7 @@ def validmmddyyyy(day: str):
         return False
     return True
 
+# Takes in mmddyyyy string, returns year, month, and day
 def parse_mmddyyyy(day: str):
     assert validmmddyyyy(day)
     m = int(day[0:2])
@@ -278,7 +332,7 @@ def edit_meeting():
     # Until Date fill
     until_date = event['rrule']["until"][0] if not form_indef else None
     ud = f"{until_date.year}-{str(until_date.month).zfill(2)}-{str(until_date.day).zfill(2)}" if until_date else None
-
+    # Init form
     form = EventForm()
     if request.method == "GET":
         form.freq.data = event['rrule']["freq"][0].lower()

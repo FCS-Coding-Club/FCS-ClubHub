@@ -3,6 +3,31 @@
     {{ super() }}
 {% endblock head %}
 {% block title %}ClubHub - {{current_club.name}}{% endblock title %}
+<!--for promoting and demoting members-->
+{% macro pop_profile(user, isLeader) %}
+<a tabindex="0"
+   class="text-decoration-none col-1" 
+   role="button"  
+   data-toggle="popover" 
+   data-trigger="focus" 
+   placement="bottom"
+   title="<b>{{user.fname}} {{user.lname}}</b>" 
+   data-bs-content="
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/profile/{{user.id}}'>Profile</a>
+   {% if isLeader %}
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/remove_leader?club={{current_club.id}}&user={{user.id}}'>Remove Leader</a>
+   {% else %}
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/add_leader?club={{current_club.id}}&user={{user.id}}'>Make Leader</a>
+   {% endif %}">
+   <div class="userimg rounded-circle fs-6 text-black shadow-sm">
+       {{user.fname[0] + user.lname[0]}}
+   </div>
+</a>
+{% endmacro %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -19,7 +44,11 @@
             <h3>Leaders</h3>
             <div class="row row-cols-3">
             {% for leader in leaders%}
-                <div class="col">{{profile(leader.user())}}</div>
+                {% if isClubLeader %}
+                {{pop_profile(leader.user(), true)}}
+                {% else %}
+                <div class="col-4">{{profile(leader.user())}}</div>
+                {% endif %}
                 {% else %}
                 <p class="text-break">No Leaders... is this Anarchy Club?</p>
             {% endfor %}
@@ -28,7 +57,11 @@
             <div class="row row-cols-3">
             {% for member in members%}
                 {% if not member.isLeader%}
+                {% if isClubLeader %}
+                {{pop_profile(member.user(), false)}}
+                {% else %}
                 <div class="col">{{profile(member.user())}}</div>
+                {% endif %}
                 {% endif %}
                 {% else %}
                 {% if isClubLeader %}
@@ -221,27 +254,30 @@
                             //Change Modal Content
                             modalContent.innerHTML = ""
                             for (let e = 0; e < meetingNum; e++) {
+                                let meetingDiv = document.createElement("div")
                                 let meetingHeader = document.createElement("b")
                                 meetingHeader.innerText = meetingNames[e] + ": " + meetingTimes[e]
-                                modalContent.appendChild(meetingHeader)
+                                meetingDiv.appendChild(meetingHeader)
                                 let meetingDescription = document.createElement("p")
+                                meetingDescription.className = "mb-0"
                                 meetingDescription.innerText = meetingDescriptions[e]
-                                modalContent.appendChild(meetingDescription)
+                                meetingDiv.appendChild(meetingDescription)
                                 if (isLeader) {
                                     let editMeetingButton = document.createElement("a")
                                     editMeetingButton.innerText = "✎"
                                     editMeetingButton.className = "btn btn-light"
                                     editMeetingButton.href = 
                                     `/edit_meeting?club={{current_club.id}}&uid=${uids[e]}`
-                                    modalContent.appendChild(editMeetingButton)
+                                    meetingDiv.appendChild(editMeetingButton)
 
                                     let deleteMeetingButton = document.createElement("a")
                                     deleteMeetingButton.innerText = "❌"
                                     deleteMeetingButton.className = "btn btn-light"
                                     deleteMeetingButton.href = 
                                     `/delete_meeting?club={{current_club.id}}&uid=${uids[e]}`
-                                    modalContent.appendChild(deleteMeetingButton)
+                                    meetingDiv.appendChild(deleteMeetingButton)
                                 }
+                                modalContent.appendChild(meetingDiv)
                             }
                         } else {
                             let title = `No meetings on \
