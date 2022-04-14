@@ -193,6 +193,10 @@
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
                     entry.disabled = !day
+
+                    let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                    let modalContent = document.getElementById(`ModalContent${row}${col}`)
+
                     if (day) {
                         if (isLeader) {
                             document.getElementById(`modal-aml${row}${col}`).href = `\
@@ -207,10 +211,8 @@
                             let title = `${meetingNum} \
                             ${meetingNum > 1 ? "meetings" : "meeting"} \
                             on ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
                             //Change Modal Content
-                            let modalContent = document.getElementById(`ModalContent${row}${col}`)
                             modalContent.innerHTML = ""
                             for (let e = 0; e < meetingNum; e++) {
                                 let meetingHeader = document.createElement("b")
@@ -220,6 +222,13 @@
                                 meetingDescription.innerText = meetingDescriptions[e]
                                 modalContent.appendChild(meetingDescription)
                                 if (isLeader) {
+                                    let editMeetingButton = document.createElement("a")
+                                    editMeetingButton.innerText = "✎"
+                                    editMeetingButton.className = "btn btn-light"
+                                    editMeetingButton.href = 
+                                    `/edit_meeting?club={{current_club.id}}&uid=${uids[e]}`
+                                    modalContent.appendChild(editMeetingButton)
+
                                     let deleteMeetingButton = document.createElement("a")
                                     deleteMeetingButton.innerText = "❌"
                                     deleteMeetingButton.className = "btn btn-light"
@@ -231,8 +240,8 @@
                         } else {
                             let title = `No meetings on \
                             ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
+                            modalContent.innerHTML = ""
                         }
                     }
                 }

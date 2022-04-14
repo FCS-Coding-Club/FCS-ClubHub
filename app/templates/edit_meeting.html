@@ -1,0 +1,105 @@
+<!--The registration page of Clubhub, child of base.html-->
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock head %}
+{% block title %}Club Hub - Add Meeting{% endblock title %}
+{% block content %}
+    {% if form.errors %}
+    <div class="alert alert-danger">
+    Invalid Form, Please Try Again
+    </div>
+    {% endif %}
+    <div class="w-100 h-100 row align-items-center justify-content-center">
+        <form action="/edit_meeting?club={{clubid}}&uid={{uid}}" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+            {{ form.hidden_tag() }}
+                <div class="form-group my-2">
+                    <label for="name">Meeting Name</label>
+                    {% for error in form.name.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.name(size=30, class="form-control bg-light border-dark", placeholder="Clove Hitch Practice",
+                    value=event['summary'])}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="desc">Description (optional)</label>
+                    {% for error in form.desc.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.desc(size=280, class="form-control bg-light border-dark", id="aef-desc", style="height: 100px", 
+                    placeholder="You will \"knot\" forget how to tie a clove hitch after this meeting",
+                    value=event['description'])}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="start_time">Start Time</label>
+                    {% for error in form.start_time.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.start_time(class="form-control bg-light border-dark",
+                    value=st)}}
+                    <label for="end_time">End Time</label>
+                    {% for error in form.end_time.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.end_time(class="form-control bg-light border-dark",
+                    value=et)}}
+                </div>
+                <div class="form-group my-2">
+                    <label for="desc">Repeat Event?</label>
+                    {% for error in form.repeat.errors %}
+                        | <span class="alert-danger">{{ error }}</span>
+                    {% endfor %}
+                    {{form.repeat(id="aef-repeat", class="bg-light", onClick="updateRRuleVisibility()",
+                    checked=re)}}
+                </div>
+                <span id="repeat-form-group">
+                    <label for="indefrepeat">Repeat Indefinitely?</label>
+                    {{form.indefrepeat(id="aef-indefrepeat", class="bg-light", onClick="updateUntilVisibility()",
+                    checked=ri)}}
+                    <div class="form-group my-2">
+                        <label for="every">Repeat Every</label>
+                        {% for error in form.every.errors %}
+                            | <span class="alert-danger">{{ error }}</span>
+                        {% endfor %}
+                        {{form.every(class="bg-light border-top-0
+                        border-start-0 border-end-0", min="1", value= event['rrule'].interval[0] if re else "1")}}
+                        {{form.freq(class="bg-light py-1 mx-1 border-top-0
+                        border-start-0 border-end-0")}}
+                        <span id="until-form-input">
+                            <label for="until">until</label>
+                            {% for error in form.until.errors %}
+                                | <span class="alert-danger">{{ error }}</span>
+                            {% endfor %}
+                            {{form.until(class="bg-light border-top-0
+                            border-start-0 border-end-0",
+                            min=day_yyyy_mm_dd,
+                            value= day_yyyy_mm_dd if ri else ud)}} 
+                        </span>
+                    </div>   
+                </span>
+                
+            <input type ="submit" class="btn btn-lg btn-primary my-2 shadow-sm" value = "Save Changes" />
+            <a class="btn btn-lg btn-danger my-2 shadow-sm" href="/club/{{clubid}}">Cancel Changes</a>
+        </form>
+        <script type="text/javascript">
+
+            const dfi = document.getElementById("aef-desc")
+            const rfg = document.getElementById("repeat-form-group")
+            const rcb = document.getElementById("aef-repeat")
+            const ucb = document.getElementById("aef-indefrepeat")
+            const ufi = document.getElementById("until-form-input")
+
+            //Stupid Workaround becuase <textarea> doesnt have a value attribute
+            dfi.innerText = dfi.getAttribute("value")
+
+            updateRRuleVisibility()
+            updateUntilVisibility()
+            function updateRRuleVisibility() {
+                rfg.style.display = rcb.checked ? "" : "none"
+            }
+            function updateUntilVisibility() {
+                ufi.style.display = !ucb.checked ? "" : "none"
+            }
+        </script>  
+    </div>
+{% endblock content %}

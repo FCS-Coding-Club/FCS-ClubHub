@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from dateutil import rrule
+from pytz import utc
 from .models import User, Club, Member, Announcement, Account, db
 from app.views import accounts
 
@@ -35,16 +36,17 @@ def fill_with_test_data(database, ctx):
                 summary="Test Event",
                 desc="Testing Testing 1 2",
                 recurrence_rule={
-                    'freq': 'daily',
+                    'freq': 'weekly',
                     'interval': 2,
-                    'until': datetime(2022, 3, 11, 0, 0, 0).astimezone(timezone.utc)
+                    'until': datetime(2022, 5, 11, 0, 0, 0, tzinfo=utc)
                 }
             )
             event1 = club.get_events_by_summary("Test Event")[0]
             club.edit_event(event1['uid'], {
-                'dtstart': datetime(2022, 2, 25, 10, 30, 0).astimezone(timezone.utc),
-                'dtend': datetime(2022, 2, 25, 11, 30, 0).astimezone(timezone.utc)
+                'dtstart': datetime(2022, 2, 25, 10, 30, 0, tzinfo=utc),
+                'dtend': datetime(2022, 2, 25, 11, 30, 0, tzinfo=utc)
             })
+            '''
             club.add_event(
                 start_date=datetime(2022, 2, 28, 11, 30, 0),
                 end_date=datetime(2022, 2, 28, 12, 30, 0),
@@ -55,7 +57,8 @@ def fill_with_test_data(database, ctx):
                     'interval': 1,
                     'until': datetime(2022, 3, 22, 0, 0, 0).astimezone(timezone.utc)
                 }
-            )          
+            ) 
+            '''       
             # event2 = club.get_events_by_summary("Test Event 2")[0]
             # club.remove_event(event2['uid'])
             database.session.commit()
