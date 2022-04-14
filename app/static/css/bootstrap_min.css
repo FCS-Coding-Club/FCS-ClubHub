@@ -7799,3 +7799,22 @@ svg {
   display: flex;
   align-items: center;
   justify-content: center; }
+
+.bg-lavinia {
+  background-image: url("/static/img/Lavinia_Painting.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(1px);
+  -webkit-filter: blur(1px);
+  height: 100%;
+  width: 100%;
+  margin-left: 0%;
+  margin-right: 0%; }
+
+.form-with-bg {
+  position: absolute;
+  display: flex;
+  left: 0;
+  top: 0;
+  z-index: 0; }

@@ -1,0 +1,12 @@
+<!--400 Error Page-->
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}{{e.code}} - {{e.name}}{% endblock %}
+{% block content %}
+<div class="has-b w-100 h-100 text-center">
+        <h3 class="mt-4">Error {{e.code}} - {{e.name}}</h3>
+        <p class="mt-3">{{e.description}}</p>
+</div>
+{% endblock %}

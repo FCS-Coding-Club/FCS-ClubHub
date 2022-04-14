@@ -2,34 +2,45 @@
 {% block head %}
     {{ super() }}
 {% endblock head %}
-{% block title %}ClubHub - {{current_club.name}} {% endblock title %}
+{% block title %}ClubHub - {{current_club.name}}{% endblock title %}
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-12">
             <h2 class="mt-3">{{current_club.name}}</h2>
             <hr>
-            <p>{{current_club.desc}}</p>
+            <p class="text-break">{{current_club.desc}}</p>
             <h3>Leaders</h3>
-            <div class=".row-cols-3">
-            {% for member in members%}
-                {% if member.isLeader%}
-                <div class="col">{{profile(member.user)}}</div>
-                {% endif %}
+            <div class="row row-cols-3">
+            {% for leader in leaders%}
+                <div class="col">{{profile(leader.user())}}</div>
                 {% else %}
-                <p>No Leaders... is this Anarchy Club?</p>
+                <p class="text-break">No Leaders... is this Anarchy Club?</p>
             {% endfor %}
             </div>
             <h3>Members</h3>
-            <div class=".row-cols-3">
+            <div class="row row-cols-3">
             {% for member in members%}
                 {% if not member.isLeader%}
-                <div class="col">{{profile(member.user)}}</div>
+                <div class="col">{{profile(member.user())}}</div>
                 {% endif %}
                 {% else %}
+                {% if isClubLeader %}
                 <p>No Members...I'm sure people will join soon :)</p>
+                {% else %}
+                <p>No Members...you can always join :)</p>
+                {% endif %}     
             {% endfor %}
             </div>
+            <div class="mt-3">
+                {% if not isClubMember %}
+                <a class="btn btn-light"
+                href="/join_club?club={{current_club.id}}">Join Club</a>
+                {% else %}
+                <a class="btn btn-light"
+                href="/leave_club?club={{current_club.id}}">Leave Club</a>
+                {% endif %}
+            </div> 
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 align-content-center">
             <h2 class="text-center my-3">Meetings</h2>
@@ -61,7 +72,8 @@
                         data-bs-target="#Modal{{row}}{{col}}">
                         </button>
                     </div>
-                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
+                    <div class="modal fade" id="Modal{{row}}{{col}}" tabindex="-1" role="dialog" 
+                    aria-labelledby="ModalLabel{{row}}{{col}}" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content bg-light">
                             <div class="modal-header border-secondary">
@@ -70,6 +82,10 @@
                             <div class="modal-body" id="ModalContent{{row}}{{col}}">
                             </div>
                             <div class="modal-footer border-secondary">
+                                {% if isClubLeader %}
+                                <a id="modal-aml{{row}}{{col}}" class="btn btn-light"
+                                href="/add_meeting?club={{current_club.id}}">Add Meeting</a>
+                                {% endif %}
                               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             </div>
                           </div>
@@ -89,9 +105,28 @@
 </div>
 <script>
     // Club Calendar Scripting
+    const isLeader = !(document.getElementById("modal-aml00") == null)
+    let addMeeting_baseURL = ""
+    if (isLeader) {
+        addMeeting_baseURL = document.getElementById("modal-aml00").href
+    }
     let d = new Date();
     let current_month = d.getMonth() + 1;
     let current_year = d.getFullYear();
+
+    // for turning 3 (March) to 03
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    //4, 2, 2022 -> "04022022"
+    function mmddyyyy(m, d, y) {
+        return [
+            padTo2Digits(m),
+            padTo2Digits(d),
+            y,
+        ].join('');
+    }
 
     //onLoad func call
     updateCalendar(current_month, current_year)
@@ -149,6 +184,8 @@
                     let isMeeting = json_val['isMeeting']
                     let meetingNames = json_val['names']
                     let meetingDescriptions = json_val['descriptions']
+                    let meetingTimes = json_val['times']
+                    let uids = json_val['uids']
                     /* If the key is undefined for whatever reason, this
                     will just leave the calendar box blank instead of
                     actually writing the word "undefined" */
@@ -156,7 +193,16 @@
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
                     entry.disabled = !day
+
+                    let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                    let modalContent = document.getElementById(`ModalContent${row}${col}`)
+
                     if (day) {
+                        if (isLeader) {
+                            document.getElementById(`modal-aml${row}${col}`).href = `\
+                        ${addMeeting_baseURL}&day=${mmddyyyy(current_month, day, current_year)}`
+                        }
+                        
                         if (isMeeting) {
                             entry.classList.add("bg-success")
                             // Change Modal Title
@@ -165,24 +211,37 @@
                             let title = `${meetingNum} \
                             ${meetingNum > 1 ? "meetings" : "meeting"} \
                             on ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
                             //Change Modal Content
-                            let modalContent = document.getElementById(`ModalContent${row}${col}`)
                             modalContent.innerHTML = ""
                             for (let e = 0; e < meetingNum; e++) {
                                 let meetingHeader = document.createElement("b")
-                                meetingHeader.innerText = meetingNames[e]
+                                meetingHeader.innerText = meetingNames[e] + ": " + meetingTimes[e]
                                 modalContent.appendChild(meetingHeader)
                                 let meetingDescription = document.createElement("p")
                                 meetingDescription.innerText = meetingDescriptions[e]
                                 modalContent.appendChild(meetingDescription)
+                                if (isLeader) {
+                                    let editMeetingButton = document.createElement("a")
+                                    editMeetingButton.innerText = "✎"
+                                    editMeetingButton.className = "btn btn-light"
+                                    editMeetingButton.href = 
+                                    `/edit_meeting?club={{current_club.id}}&uid=${uids[e]}`
+                                    modalContent.appendChild(editMeetingButton)
+
+                                    let deleteMeetingButton = document.createElement("a")
+                                    deleteMeetingButton.innerText = "❌"
+                                    deleteMeetingButton.className = "btn btn-light"
+                                    deleteMeetingButton.href = 
+                                    `/delete_meeting?club={{current_club.id}}&uid=${uids[e]}`
+                                    modalContent.appendChild(deleteMeetingButton)
+                                }
                             }
                         } else {
                             let title = `No meetings on \
                             ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
+                            modalContent.innerHTML = ""
                         }
                     }
                 }

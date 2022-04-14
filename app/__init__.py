@@ -18,8 +18,10 @@ isTesting = os.environ.get("TESTING")
 def create_app():
     # Compile Sass
     compile_sass()
-    # Set Production vars
-    if isDebug != "True":
+    # Set env vars
+    if isDebug == "True":
+        setDebugEnvironmentVars()
+    else:
         setProdEnvironmentVars()
     # Init App
     app = Flask(__name__)
@@ -71,11 +73,14 @@ def compile_sass():
     with open('app/static/css/bootstrap_min.css', 'w') as css:
         css.write(compiled)
 
+# Set Debug Environment Variables
+def setDebugEnvironmentVars():
+    setSecretKeyVars()
+    os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubhub.db"
 
 # Set Production Environment Variables
 def setProdEnvironmentVars():
-    os.environ["SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
-    os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+    setSecretKeyVars()
     # Set mysql uri for sqlalchemy
     if 'RDS_HOSTNAME' in os.environ:
         os.environ["MYSQL_URL"] = f"mysql+pymysql://{os.environ['RDS_USERNAME']}:{os.environ['RDS_PASSWORD']}@{os.environ['RDS_HOSTNAME']}:{os.environ['RDS_PORT']}"
@@ -83,6 +88,11 @@ def setProdEnvironmentVars():
     else:
         # Otherwise, fallback to sqlite
         os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubhub.db"
+
+# Randomized secret keys for Flask and CSRF
+def setSecretKeyVars():
+    os.environ["SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+    os.environ["WTF_CSRF_SECRET_KEY"] = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
 
 # Blueprint Registration Function
 def register_blueprints(app):

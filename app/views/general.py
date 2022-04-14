@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
+from json import dumps
+from werkzeug.exceptions import HTTPException
 
 mod = Blueprint('general', __name__, template_folder='../templates')
 
@@ -9,7 +11,19 @@ mod = Blueprint('general', __name__, template_folder='../templates')
 def homepage():
     return render_template("index.html", current_user=current_user)
 
-
-@mod.app_errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
+# Non-2xx Status Handling
+@mod.app_errorhandler(HTTPException)
+def page_not_found(e: HTTPException):
+    # Custom Error Pages
+    if e.code in [400, 403, 404]:
+        return render_template(f'error/4xx.html', e = e)
+    # Fallback Default JSON Error
+    r = e.get_response()
+    # replace the body with JSON
+    r.data = dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    r.content_type = "application/json"
+    return r

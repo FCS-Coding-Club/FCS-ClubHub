@@ -39,20 +39,28 @@ def load_user_memberships(user_id):
     return Member.query.filter_by(user_id=user_id)
 
 
+def load_member(club_id, user_id):
+    m = Member.query.filter(club_id == club_id, 
+                            user_id == user_id)
+    if m is None:
+        return None
+    return m.first()
+
 # Checks if user (user_id) is a member of club (club_id)
 def is_member(club_id, user_id):
-    return bool(Member.query.get(Member.club_id == club_id,
-                                 Member.user_id == user_id))
+    return bool(Member.query.filter(Member.club_id == club_id,
+                                 Member.user_id == user_id).first())
 
 
 # Checks if user (user_id) is a leader of club (club_id)
 def is_leader(club_id, user_id):
     return bool(Member.query.filter(Member.club_id == club_id,
                                     Member.user_id == user_id,
-                                    Member.isLeader))
+                                    Member.isLeader).first())
 
 
 # Checks if user (user_id) is a site admin
+# Returns None if user / account DNI
 def is_admin(user_id):
     user = Member.query.get(user_id)
     if user is None:
@@ -61,6 +69,10 @@ def is_admin(user_id):
     if acct is None:
         return None
     return acct.admin
+
+def event_exists(club: Club, event_id: str):
+    e = club.get_event_by_uid(event_id)
+    return e is not None
 
 
 """Loads the clubs a user is in, and returns a list of dictionaries:

@@ -3,7 +3,7 @@
 {% block head %}
     {{ super() }}
 {% endblock head %}
-{% block title %}Club Hub - Register{% endblock title %}
+{% block title %}Club Hub - Register Club{% endblock title %}
 {% block content %}
     {% if form.errors %}
     <div class="alert alert-danger">
@@ -11,7 +11,7 @@
     </div>
     {% endif %}
     <div class="w-100 h-100 row align-items-center justify-content-center">
-        <form action="/register_club" class="col-lg-6 bg-light py-2 px-3 shadow-lg" method="POST">
+        <form action="/register_club" class="col-lg-6 bg-light py-2 px-3 shadow-lg rounded-1" method="POST">
             {{ form.hidden_tag() }}
                 <div class="form-group my-2">
                     <label for="name">Club Name</label>

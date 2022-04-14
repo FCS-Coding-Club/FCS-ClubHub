@@ -1,15 +1,10 @@
 from datetime import datetime
-from typing import Any
 
-from dateutil import rrule
-from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from icalendar import Calendar, Event, vDatetime
 import uuid
 from app.utils import gen_barebones_ical
-
-import json
 
 db = SQLAlchemy()
 
@@ -49,7 +44,7 @@ class Club(db.Model):
 
     # Add event to calendar
     def add_event(self, start_date: datetime, end_date: datetime,
-                  summary: str, desc: str = "", recurrence_rule: rrule = None):
+                  summary: str, desc: str = "", recurrence_rule = None):
         # Create Event and fill in data
         e = Event()
         e.add('dtstart', start_date)
@@ -119,7 +114,7 @@ class Club(db.Model):
         # Get event according to uid
         event = self.get_event_by_uid(uid, c)
         # Remove event
-        c.remove(event)
+        c.subcomponents.remove(event)
         # Recompile to UTF-8 and enter data to SQL
         self.calendar = c.to_ical().decode('utf-8')
 
@@ -165,8 +160,9 @@ class User(db.Model, UserMixin):
 # Club Member Model
 class Member(db.Model):
     __tablename__ = 'members'
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False, primary_key=True)
-    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    club_id = db.Column(db.Integer, db.ForeignKey(Club.id), nullable=False)
     isLeader = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, user_id, club_id, isLeader):
@@ -177,6 +173,11 @@ class Member(db.Model):
     def __repr__(self):
         return f'<Club {"Leader" if self.isLeader else "Member"}, id {self.user_id}, club_id {self.club_id}>'
 
+    def club(self):
+        return Club.query.get(self.club_id)
+
+    def user(self):
+        return User.query.get(self.user_id)
 
 # Club Announcement Model
 class Announcement(db.Model):
