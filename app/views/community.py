@@ -42,6 +42,9 @@ class RegisterClubForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30), UniqueClubName()])
     desc = TextAreaField('Description', validators=[Optional(), Length(max=280)])
 
+class EditClubForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30)])
+    desc = TextAreaField('Description', validators=[Optional(), Length(max=280)])
 
 class EventForm(FlaskForm):
     name = StringField('Event Name', id="aef-name", validators=[DataRequired(), Length(min=4, max=30)])
@@ -88,6 +91,32 @@ def register_club():
             models.db.session.commit()
             return redirect(url_for('community.club', clubid=new_club.id))
         return render_template('register_club.html', form=form)
+
+# Edit Club Form
+@mod.route("/edit_club", methods=["GET", "POST"])
+@login_required
+def edit_club():
+    clubid = request.args.get('club')
+    if clubid is None:
+        abort(404)
+    club = dbutils.load_club(clubid)
+    if club is None:
+        abort(404)
+    if not dbutils.is_leader(clubid, current_user.id):
+        abort(403)
+    form = EditClubForm()
+    if request.method == 'GET':
+        form.name.data = club.name
+        form.desc.data = club.desc
+        return render_template("edit_club.html", club_id=clubid, form=form)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # Make Changes to Club
+            club.name = form.name.data
+            club.desc = form.desc.data
+            models.db.session.commit()
+            return redirect(url_for('community.club', clubid=club.id))
+        return render_template('edit_club.html', club_id=clubid, form=form)
 
 
 # Club Routing
