@@ -23,22 +23,23 @@
     <div class="d-flex flex-column min-vh-100 vh-100">
         <nav class="navbar navbar-expand-sm navbar-light bg-light w-100 justify-content-center d-lg-flex"
         style="z-index: 1000;">
-            <a class="navbar-brand m-2" href="/">FCS Club Hub</a>
+            <a class="navbar-brand ps-4 m-2" href="/">FCS Club Hub</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarExample" 
             aria-controls="navbarExample" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" style="flex-grow: 2;" id="navbarExample">
-                <ul class="nav h-100 justify-content-between">
+                <!-- ms-auto in ul made the items align correctly. Might need to work on padding on the other side but otherwise it works well.-->
+                <ul class="nav h-100 justify-content-between ms-auto">
                 {% if current_user.is_authenticated %}
-                <li class="nav-item h-100 m-2 my-auto">
-                    {{profile(current_user)}} 
-                </li>
-                <li class="nav-item m-2">
-                    <form action="/logout">
-                        <input class="btn btn-light" type="submit" value="Logout">
-                    </form>
-                </li>
+                    <li class="nav-item h-100 m-2 my-auto">
+                        {{profile(current_user)}} 
+                    </li>
+                    <li class="nav-item m-2">
+                        <form action="/logout">
+                            <input class="btn btn-light" type="submit" value="Logout">
+                        </form>
+                    </li>
                 {% else %}
                     <li class="nav-item m-2">
                         <form action="/login">
