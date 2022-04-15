@@ -16,11 +16,18 @@ def fill_account_json_in_db(json):
         name = e["NAME"]
         grade = int(e["GRADE"])
         email = e["EMAIL"]
+        if load_account(email): continue
         db.session.add(Account(name, grade, email))
     db.session.commit()
 
 
 # Handy Utility functions for moving across different relational tables
+
+def load_account(email):
+    a = Account.query.filter(Account.email == email)
+    if a is None:
+        return None
+    return a.first()
 
 def load_club(club_id):
     return Club.query.get(club_id)
