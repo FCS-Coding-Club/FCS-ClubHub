@@ -14,6 +14,7 @@ from app.models import dbutils, models
 
 mod = Blueprint('community', __name__, template_folder='../templates')
 
+# Validators
 
 class UniqueClubName:
     def __call__(self, form, field):
@@ -37,6 +38,7 @@ class OptionalIf(Optional):
         if bool(otherField.data):
             super(OptionalIf, self).__call__(form, field)
 
+# Forms
 
 class RegisterClubForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=30), UniqueClubName()])
@@ -308,6 +310,7 @@ def add_meeting():
     abort(404)
 
 # Edit Club Meeting Form
+# TODO: Refactor to use form.___.data rather than render function kwargs
 @mod.route("/edit_meeting", methods=["GET", "POST"])
 @login_required
 def edit_meeting():

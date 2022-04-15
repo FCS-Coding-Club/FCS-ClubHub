@@ -194,6 +194,8 @@
     }
     //general updateCalendar function
     function updateCalendar(month, year) {
+        //"Yeah, React might have been a better idea" -Sean
+
         document.querySelectorAll('[data-toggle="tooltip"]').forEach(e => e.tooltip())
         //calls api using fetch, parses json, and fills in calendar
         fetch(`/api/calendar/month_meetings?club={{current_club.id}}&month=${month}&year=${year}`, {
@@ -254,15 +256,20 @@
                             //Change Modal Content
                             modalContent.innerHTML = ""
                             for (let e = 0; e < meetingNum; e++) {
+                                //Parent Div
                                 let meetingDiv = document.createElement("div")
+                                //Meeting Header
                                 let meetingHeader = document.createElement("b")
                                 meetingHeader.innerText = meetingNames[e] + ": " + meetingTimes[e]
                                 meetingDiv.appendChild(meetingHeader)
+                                //Meeting Description
                                 let meetingDescription = document.createElement("p")
                                 meetingDescription.className = "mb-0"
                                 meetingDescription.innerText = meetingDescriptions[e]
                                 meetingDiv.appendChild(meetingDescription)
+                                //Button Controls for Leaders
                                 if (isLeader) {
+                                    //Edit Meeting Button
                                     let editMeetingButton = document.createElement("a")
                                     editMeetingButton.innerText = "✎"
                                     editMeetingButton.className = "btn btn-light"
@@ -270,6 +277,7 @@
                                     `/edit_meeting?club={{current_club.id}}&uid=${uids[e]}`
                                     meetingDiv.appendChild(editMeetingButton)
 
+                                    //Remove Meeting Button
                                     let deleteMeetingButton = document.createElement("a")
                                     deleteMeetingButton.innerText = "❌"
                                     deleteMeetingButton.className = "btn btn-light"
@@ -277,6 +285,7 @@
                                     `/delete_meeting?club={{current_club.id}}&uid=${uids[e]}`
                                     meetingDiv.appendChild(deleteMeetingButton)
                                 }
+                                //Add everything to the modal
                                 modalContent.appendChild(meetingDiv)
                             }
                         } else {
