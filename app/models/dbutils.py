@@ -40,8 +40,8 @@ def load_user_memberships(user_id):
 
 
 def load_member(club_id, user_id):
-    m = Member.query.filter(club_id == club_id, 
-                            user_id == user_id)
+    m = Member.query.filter(Member.club_id == club_id, 
+                            Member.user_id == user_id)
     if m is None:
         return None
     return m.first()
@@ -49,7 +49,7 @@ def load_member(club_id, user_id):
 # Checks if user (user_id) is a member of club (club_id)
 def is_member(club_id, user_id):
     return bool(Member.query.filter(Member.club_id == club_id,
-                                 Member.user_id == user_id).first())
+                                    Member.user_id == user_id).first())
 
 
 # Checks if user (user_id) is a leader of club (club_id)
@@ -70,6 +70,7 @@ def is_admin(user_id):
         return None
     return acct.admin
 
+# Checks if event (event_id) exists in club (club)
 def event_exists(club: Club, event_id: str):
     e = club.get_event_by_uid(event_id)
     return e is not None
