@@ -65,6 +65,10 @@ def app_config(app):
         SECRET_KEY=os.environ.get("SECRET_KEY"),
         WTF_CSRF_SECRET_KEY=os.environ.get("SECRET_KEY"),
         SQLALCHEMY_DATABASE_URI=os.environ["SQLALCHEMY_DATABASE_URI"],
+        SQLALCHEMY_ENGINE_OPTIONS = {
+            "pool_pre_ping": True,
+            "pool_recycle": 300,
+        },
         SQLALCHEMY_TRACK_MODIFICATIONS=False))
 
 
