@@ -3,17 +3,52 @@
     {{ super() }}
 {% endblock head %}
 {% block title %}ClubHub - {{current_club.name}}{% endblock title %}
+<!--for promoting and demoting members-->
+{% macro pop_profile(user, isLeader) %}
+<a tabindex="0"
+   class="text-decoration-none col-1" 
+   role="button"  
+   data-toggle="popover" 
+   data-trigger="focus" 
+   placement="bottom"
+   title="<b>{{user.fname}} {{user.lname}}</b>" 
+   data-bs-content="
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/profile/{{user.id}}'>Profile</a>
+   {% if isLeader %}
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/remove_leader?club={{current_club.id}}&user={{user.id}}'>Remove Leader</a>
+   {% else %}
+   <a class='ms-2 btn border border-1 rounded-1'
+   href='/add_leader?club={{current_club.id}}&user={{user.id}}'>Make Leader</a>
+   {% endif %}">
+   <div class="userimg rounded-circle fs-6 text-black shadow-sm">
+       {{user.fname[0] + user.lname[0]}}
+   </div>
+</a>
+{% endmacro %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <h2 class="mt-3">{{current_club.name}}</h2>
+            <h2 class="mt-3">
+                {{current_club.name}}
+                {% if isClubLeader %}
+                <a class="text-decoration-none ms-1" 
+                href="/edit_club?club={{current_club.id}}">✎</a>
+                {% endif %}
+            </h2>
             <hr>
             <p class="text-break">{{current_club.desc}}</p>
             <h3>Leaders</h3>
             <div class="row row-cols-3">
             {% for leader in leaders%}
-                <div class="col">{{profile(leader.user())}}</div>
+                {% if isClubLeader %}
+                {{pop_profile(leader.user(), true)}}
+                {% else %}
+                <div class="col-4">{{profile(leader.user())}}</div>
+                {% endif %}
                 {% else %}
                 <p class="text-break">No Leaders... is this Anarchy Club?</p>
             {% endfor %}
@@ -22,7 +57,11 @@
             <div class="row row-cols-3">
             {% for member in members%}
                 {% if not member.isLeader%}
+                {% if isClubLeader %}
+                {{pop_profile(member.user(), false)}}
+                {% else %}
                 <div class="col">{{profile(member.user())}}</div>
+                {% endif %}
                 {% endif %}
                 {% else %}
                 {% if isClubLeader %}
@@ -155,6 +194,8 @@
     }
     //general updateCalendar function
     function updateCalendar(month, year) {
+        //"Yeah, React might have been a better idea" -Sean
+
         document.querySelectorAll('[data-toggle="tooltip"]').forEach(e => e.tooltip())
         //calls api using fetch, parses json, and fills in calendar
         fetch(`/api/calendar/month_meetings?club={{current_club.id}}&month=${month}&year=${year}`, {
@@ -193,6 +234,10 @@
                     //Highlight meetings with green background
                     entry.classList.remove("bg-success")
                     entry.disabled = !day
+
+                    let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
+                    let modalContent = document.getElementById(`ModalContent${row}${col}`)
+
                     if (day) {
                         if (isLeader) {
                             document.getElementById(`modal-aml${row}${col}`).href = `\
@@ -207,32 +252,47 @@
                             let title = `${meetingNum} \
                             ${meetingNum > 1 ? "meetings" : "meeting"} \
                             on ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
                             //Change Modal Content
-                            let modalContent = document.getElementById(`ModalContent${row}${col}`)
                             modalContent.innerHTML = ""
                             for (let e = 0; e < meetingNum; e++) {
+                                //Parent Div
+                                let meetingDiv = document.createElement("div")
+                                //Meeting Header
                                 let meetingHeader = document.createElement("b")
                                 meetingHeader.innerText = meetingNames[e] + ": " + meetingTimes[e]
-                                modalContent.appendChild(meetingHeader)
+                                meetingDiv.appendChild(meetingHeader)
+                                //Meeting Description
                                 let meetingDescription = document.createElement("p")
+                                meetingDescription.className = "mb-0"
                                 meetingDescription.innerText = meetingDescriptions[e]
-                                modalContent.appendChild(meetingDescription)
+                                meetingDiv.appendChild(meetingDescription)
+                                //Button Controls for Leaders
                                 if (isLeader) {
+                                    //Edit Meeting Button
+                                    let editMeetingButton = document.createElement("a")
+                                    editMeetingButton.innerText = "✎"
+                                    editMeetingButton.className = "btn btn-light"
+                                    editMeetingButton.href = 
+                                    `/edit_meeting?club={{current_club.id}}&uid=${uids[e]}`
+                                    meetingDiv.appendChild(editMeetingButton)
+
+                                    //Remove Meeting Button
                                     let deleteMeetingButton = document.createElement("a")
                                     deleteMeetingButton.innerText = "❌"
                                     deleteMeetingButton.className = "btn btn-light"
                                     deleteMeetingButton.href = 
                                     `/delete_meeting?club={{current_club.id}}&uid=${uids[e]}`
-                                    modalContent.appendChild(deleteMeetingButton)
+                                    meetingDiv.appendChild(deleteMeetingButton)
                                 }
+                                //Add everything to the modal
+                                modalContent.appendChild(meetingDiv)
                             }
                         } else {
                             let title = `No meetings on \
                             ${month_name} ${day}, ${current_year}`
-                            let modalLabel = document.getElementById(`ModalLabel${row}${col}`)
                             modalLabel.innerText = title
+                            modalContent.innerHTML = ""
                         }
                     }
                 }

@@ -11,8 +11,8 @@ from .models import dbutils, models, mock_db
 from .views import accounts
 from .utils import render_functions
 
-isDebug = os.environ.get("DEBUG")
-isTesting = os.environ.get("TESTING")
+isDebug = os.environ.get("DEBUG") if os.environ.get("DEBUG") else "True"
+isTesting = os.environ.get("TESTING") if os.environ.get("TESTING") else "False"
 
 
 def create_app():
@@ -45,9 +45,11 @@ def create_app():
     app.jinja_env.globals.update(render_functions)
     # Context Processing
     with app.app_context():
-        models.db.drop_all()
-        models.db.create_all()
-        models.db.session.commit()
+        if isDebug == "True":
+            print(f"Debug env set to {isDebug}, flushing database...")
+            models.db.drop_all()
+            models.db.create_all()
+            models.db.session.commit()
         init_account_json()
         # Adds dummy data for dev purposes
         if isDebug == "True" or isTesting == "True":

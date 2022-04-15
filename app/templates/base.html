@@ -15,7 +15,7 @@
     {% endblock %}
 </head>
 {% macro profile(user) %}
-<a href="/profile/{{user.id}}" class="text-decoration-none">
+<a href="/profile/{{user.id}}" class="text-decoration-none col-1">
     <div class="userimg rounded-circle fs-6 text-black shadow-sm">{{user.fname[0] + user.lname[0]}}</div>
 </a>
 {% endmacro %}
@@ -62,5 +62,11 @@
             </div>
         </footer>
     </div>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTrigger) {
+            return new bootstrap.Popover(popoverTrigger, {html: true, trigger: 'focus'})
+        })
+    </script>
 </body>
 </html>
