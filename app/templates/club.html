@@ -47,7 +47,7 @@
                 {% if isClubLeader %}
                 {{pop_profile(leader.user(), true)}}
                 {% else %}
-                <div class="col-4">{{profile(leader.user())}}</div>
+                <div class="col-1">{{profile(leader.user())}}</div>
                 {% endif %}
                 {% else %}
                 <p class="text-break">No Leaders... is this Anarchy Club?</p>
@@ -60,7 +60,7 @@
                 {% if isClubLeader %}
                 {{pop_profile(member.user(), false)}}
                 {% else %}
-                <div class="col">{{profile(member.user())}}</div>
+                <div class="col-1">{{profile(member.user())}}</div>
                 {% endif %}
                 {% endif %}
                 {% else %}

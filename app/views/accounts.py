@@ -113,7 +113,10 @@ def register():
             models.db.session.add(
                 models.User(account.id, form.data['fname'], form.data['lname'], form.data['email'], pw_hash))
             models.db.session.commit()
-            return redirect("/")
+            # Auto-Login User
+            user = models.User.query.filter_by(account_id=account.id).first()
+            login_user(user, remember=False)
+            return redirect(url_for('community.profile', userid=current_user.id))
         # This person did not successfully enter the form
         return render_template('register.html', form=form)
 
